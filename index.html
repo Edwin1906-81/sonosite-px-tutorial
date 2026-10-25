@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sonosite PX Echo Tutorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080b10;--panel:#0f141b;--panel2:#151c25;--line:#212b37;--line2:#2c3846;--text:#fff;--soft:#c9d3de;--muted:#8392a3;--accent:#4cc9f0;--accent-ink:#04222d;--ok:#34d399;--bad:#f87171;--warn:#fbbf24}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 32px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px 16px;margin-bottom:14px}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px}
+h1{font-size:1.45rem;line-height:1.2;margin:0;font-weight:700}
+.sub{color:var(--muted);font-size:.86rem;margin-top:4px;max-width:760px}
+.logo{display:block;flex:0 0 auto;background:#fff;border-radius:10px;padding:4px 8px;box-shadow:0 4px 18px rgba(0,0,0,.4)}
+.logo img{display:block;height:64px;width:auto}
+@media (max-width:520px){.logo img{height:46px}}
+.protos{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.protos button{background:var(--panel2);color:var(--soft);border:1px solid var(--line);border-radius:999px;padding:7px 14px;font:600 .82rem Inter,sans-serif;cursor:pointer}
+.protos button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px}
+@media (max-width:900px){.main{display:flex;flex-direction:column}.main>div{display:contents}.mon{order:1}#stepCard{order:2}.touch{order:3;margin-top:0}.phys{order:4;margin-top:0;overflow-x:auto}.phys svg{min-width:640px}#rep{order:5;margin-top:0}.main{gap:12px}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.mon{background:#000;border:1px solid var(--line2);border-radius:14px;overflow:hidden;position:relative}
+.mon canvas{display:block;width:100%;height:auto}
+.ptitle{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 8px}
+.steph{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.stepn{font:700 .78rem 'JetBrains Mono',monospace;color:var(--accent)}
+.bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:10px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .25s}
+.say{font-size:1.02rem;font-weight:600;line-height:1.45;margin:0 0 6px}
+.why{color:var(--soft);font-size:.86rem;margin:0 0 8px}
+.press{display:inline-flex;align-items:center;gap:6px;font:700 .74rem 'JetBrains Mono',monospace;color:var(--accent-ink);background:var(--accent);border-radius:6px;padding:2px 8px;margin-bottom:8px}
+.fb{min-height:22px;font-size:.84rem;font-weight:600}
+.fb.ok{color:var(--ok)}.fb.no{color:var(--bad)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.btn{background:var(--panel2);color:var(--soft);border:1px solid var(--line2);border-radius:8px;padding:6px 12px;font:600 .8rem Inter,sans-serif;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.tog{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--soft);margin-left:auto;cursor:pointer;user-select:none}
+.tog input{accent-color:var(--accent)}
+.touch{background:#0b1016;border:1px solid var(--line2);border-radius:14px;padding:10px}
+.tp-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tp-crumb{font:600 .74rem 'JetBrains Mono',monospace;letter-spacing:0;text-transform:none;color:var(--soft)}
+.tgroups{display:flex;flex-wrap:wrap;gap:8px}
+.tg{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:6px 8px;flex:1 1 150px;min-width:140px}
+.tg h4{margin:0 0 5px;font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.tg .tb{display:flex;flex-wrap:wrap;gap:4px}
+.tbtn{background:#1d2732;color:#e6edf5;border:1px solid #2f3c4b;border-radius:7px;padding:5px 9px;font:600 .76rem Inter,sans-serif;cursor:pointer;min-height:30px}
+.tbtn:hover{border-color:var(--accent)}
+.tbtn.sel{background:#21465a;border-color:#3a87a8}
+.hl{outline:3px solid var(--warn)!important;outline-offset:2px;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{outline-color:rgba(251,191,36,.25)}}
+.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.tnav{display:flex;gap:4px;flex-wrap:wrap;background:#06090d;border:1px solid var(--line);border-radius:10px;padding:4px;margin-bottom:8px}
+.nbtn{flex:1 1 auto;background:transparent;color:var(--muted);border:0;border-radius:7px;padding:7px 10px;font:700 .78rem Inter,sans-serif;cursor:pointer}
+.nbtn.on{background:#1f3341;color:#fff}
+.nbtn:hover{color:#fff}
+.tbtn.nend{flex:0 0 auto;background:#3a1620;border-color:#6b2433;color:#fecaca}
+.tp-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+.tp-crumb{display:flex;align-items:center;gap:8px;font:600 .8rem 'JetBrains Mono',monospace;color:#fff}
+.tp-lab{font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.bk{background:#1d2732;color:var(--accent);border:1px solid #2f3c4b;border-radius:7px;padding:4px 9px;font:700 .76rem Inter,sans-serif;cursor:pointer}
+.tg h4 em{font-style:normal;color:var(--accent);text-transform:none;letter-spacing:0;font-family:'JetBrains Mono',monospace;margin-left:4px}
+.rrow{display:flex;justify-content:space-between;gap:10px;font-size:.82rem;color:var(--soft);padding:3px 0;border-bottom:1px solid var(--line)}
+.rrow b{font-family:'JetBrains Mono',monospace;color:#fff}
+.banner{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#2a2108;border:1px solid #6b5212;color:#fde68a;border-radius:10px;padding:8px 10px;margin-bottom:8px;font-size:.82rem}
+.phase{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:6px}
+.where{display:inline-block;margin-left:8px;font-size:.78rem;color:var(--muted)}
+.fb.info{color:#fde68a}
+.tbtn.hl{position:relative}
+.tbtn.hl::after{content:'NEXT';position:absolute;top:-9px;right:-6px;background:#fbbf24;color:#1a1300;font:800 .55rem Inter,sans-serif;padding:1px 4px;border-radius:4px;letter-spacing:.06em}
+details.steps{margin-top:12px;border-top:1px solid var(--line);padding-top:8px}
+details.steps summary{cursor:pointer;font-weight:700;font-size:.86rem}
+details.steps summary span{font-weight:500;color:var(--muted);font-size:.76rem;margin-left:6px}
+.slist{max-height:300px;overflow:auto;margin-top:6px;padding-right:4px}
+.lph{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);margin:8px 0 2px}
+.slist ol{margin:0;padding-left:0;list-style:none}
+.slist li{display:grid;grid-template-columns:120px 1fr;gap:8px;padding:4px 6px;border-radius:6px;font-size:.78rem;color:var(--soft);cursor:pointer}
+.slist li:hover{background:var(--panel2)}
+.slist li .k{font-family:'JetBrains Mono',monospace;font-weight:700;color:#fff}
+.slist li.dn{opacity:.5}
+.slist li.dn .k::before{content:'✓ ';color:var(--ok)}
+.slist li.now{background:#21465a}
+@media (max-width:520px){.slist li{grid-template-columns:1fr}}
+.touch{background:#1b1e22;border:1px solid #2c3036;border-radius:18px;padding:12px}
+.tpanel{--tp:#8e949c;--tile:#7b8189;--tile2:#6e747c;--pill:#a3a9b0;--tx:#fff;--blue:#2f7cf6;background:var(--tp);border-radius:6px;overflow:hidden;color:var(--tx);font-family:Inter,sans-serif;user-select:none}
+.ttop{display:flex;align-items:center;gap:6px;background:#80868e;padding:0 8px 0 0;min-height:30px}
+.ttop .sp{flex:1}
+.tpanel .tbtn{font-family:Inter,sans-serif;color:var(--tx);cursor:pointer;border:0;min-height:0}
+.tbtn.clean{background:#a7adb4;border-radius:0 0 8px 0;padding:7px 12px;font-size:.66rem;font-weight:600}
+.tbtn.va{background:transparent;font-size:.62rem;font-weight:600;display:flex;align-items:center;gap:5px;padding:4px}
+.mic{filter:grayscale(1);font-size:.7rem}
+.sw{display:inline-block;width:26px;height:14px;border-radius:8px;background:#5b6168;position:relative;vertical-align:middle}
+.sw i{position:absolute;left:2px;top:2px;width:10px;height:10px;border-radius:50%;background:#fff;transition:left .15s}
+.sel .sw{background:var(--blue)}.sel .sw i{left:14px}
+.tbtn.endst{background:#c0392b;border-radius:6px;padding:5px 10px;font-size:.66rem;font-weight:800;letter-spacing:.03em}
+.tbtn.hamb{background:transparent;font-size:1rem;padding:2px 6px}
+.tbody{display:grid;grid-template-columns:118px minmax(0,1fr) 118px;gap:8px;padding:8px}
+.lcol,.rcol{display:flex;flex-direction:column;gap:6px}
+.tbtn.big{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:74px;border-radius:4px;font-size:.66rem;font-weight:700;background:var(--tile);text-align:center;padding:6px}
+.tbtn.big.green{background:#9be22a;color:#fff}
+.tbtn.big.purple{background:#8a3ef0}
+.tbtn.big.dim{background:var(--tile2)}
+.tbtn.big.probe b{font-size:.7rem}
+.exr{display:flex;justify-content:space-between;width:100%;background:#6a7078;border-radius:3px;padding:3px 6px;font-size:.66rem;font-weight:700}
+.exr i{font-style:normal}
+.hi{display:inline-flex;width:26px;height:26px;border-radius:50%;background:#5b6168;align-items:center;justify-content:center;font:700 15px Georgia,serif}
+.tcenter{min-width:0;display:flex;flex-direction:column;gap:6px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #a3a9b0;padding-bottom:0}
+.tbtn.tab{background:transparent;padding:5px 16px;font-size:.7rem;font-weight:700;color:#3f74d6;border-bottom:2px solid transparent}
+.tbtn.tab.on{border-bottom-color:var(--blue);color:#1d4fb8}
+.chead{display:flex;align-items:center;gap:8px;min-height:28px}
+.chead .ct{font-size:.74rem;font-weight:700;flex:1}
+.tbtn.bk{background:#6a7078;border-radius:4px;padding:4px 9px;font-size:.66rem;font-weight:700}
+.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.tile{background:var(--tile);border-radius:3px;padding:6px 6px 8px;display:flex;flex-direction:column;gap:6px;min-height:72px}
+.th{display:flex;justify-content:space-between;align-items:center;font-size:.64rem;font-weight:700;gap:4px}
+.th i{font-style:normal;font-size:.55rem;width:11px;height:11px;border-radius:50%;border:1px solid #c4c9ce;color:#d7dbdf;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto}
+.tbtn.tog{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;font-size:.62rem;font-weight:700;padding:6px}
+.sg{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+.tbtn.sgb{background:transparent;border:2px solid transparent;border-radius:6px;padding:5px 8px;font-size:.64rem;font-weight:700;min-width:34px}
+.tbtn.sgb.sel{border-color:var(--blue);background:#5d6670}
+.ar{display:flex;align-items:center;justify-content:center;gap:10px}
+.arb{display:flex;flex-direction:column;gap:4px}
+.tbtn.arw{background:var(--pill);border-radius:7px;width:52px;height:20px;display:flex;align-items:center;justify-content:center;color:#fff}
+.val{font:700 .66rem 'JetBrains Mono',monospace;text-align:left;min-width:28px}
+.tbtn.chk{background:transparent;font-size:.6rem;font-weight:700;display:flex;align-items:center;gap:4px;align-self:center}
+.cb{width:11px;height:11px;border:1.5px solid #fff;border-radius:2px;display:inline-block}
+.chk.sel .cb{background:var(--blue);border-color:var(--blue)}
+.tbtn.ico{background:var(--pill);border-radius:6px;padding:6px;display:flex;align-items:center;justify-content:center;font-size:.64rem;font-weight:700;min-height:30px}
+.bl{display:flex;flex-wrap:wrap;gap:4px}
+.tbtn.txt{background:var(--pill);border-radius:5px;padding:6px 8px;font-size:.66rem;font-weight:700;flex:1 1 auto}
+.tbtn.txt.sel{outline:2px solid var(--blue)}
+.tbtn.txt.pri{background:var(--blue)}
+.tile.k-btns{grid-column:span 1}
+.fl{display:flex;flex-direction:column;gap:4px}
+.tbtn.fld{display:flex;justify-content:space-between;background:#f3f4f6;color:#1f2937;border-radius:3px;padding:6px 8px;font-size:.66rem;font-weight:600}
+.tbtn.fld em{font-style:normal;color:#2563eb}
+.morer{display:flex;justify-content:center}
+.tbtn.more{background:var(--pill);border-radius:3px;padding:6px 18px;font-size:.66rem;font-weight:700}
+.rep2{background:var(--tile);border-radius:3px;padding:8px}
+.rep2 .rrow{border-color:#8e949c;color:#fff}
+.dlg{background:#f3f4f6;color:#111827;border-radius:6px;padding:16px;margin:16px auto;max-width:340px;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.dq{font-weight:800;font-size:.9rem;margin-bottom:6px}.dd{font-size:.76rem;color:#374151;margin-bottom:12px}
+.db{display:flex;gap:8px;justify-content:flex-end}.dlg .tbtn.txt{flex:0 0 auto;padding:6px 16px;color:#fff;background:#6b7280}.dlg .tbtn.txt.pri{background:var(--blue)}
+.hello{padding:18px 14px 22px;background:#b5bac0}
+.hq{text-align:center;font-weight:700;font-size:.8rem;margin-bottom:12px}
+.hg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tbtn.hcard{display:flex;flex-direction:column;align-items:flex-start;gap:30px;min-height:120px;border-radius:4px;padding:8px;text-align:left}
+.hcard b{font-size:.74rem}.hcard span{font-size:.6rem;font-weight:600;align-self:center;text-align:center}
+.hcard.cyan{background:#1fc6f0}.hcard.lime{background:#9be22a}.hcard.gray{background:#9aa0a7}.hcard.violet{background:#8a3ef0}
+.tpanel .tbtn.hl{outline:3px solid #fbbf24!important;outline-offset:1px}
+.tpanel .banner{margin:0}
+@media (max-width:640px){.tbody{grid-template-columns:1fr}.lcol,.rcol{flex-direction:row}.lcol .tbtn.big,.rcol .tbtn.big{flex:1;min-height:58px}.rcol{order:3}.tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.hg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tbtn.press{animation:prs .65s ease-in-out}
+@keyframes prs{0%{transform:scale(1)}40%{transform:scale(.92);box-shadow:0 0 0 6px rgba(251,191,36,.55)}100%{transform:scale(1)}}
+.phys .k.press .kf{fill:#3b4a1a;stroke:#fbbf24;stroke-width:4}
+.kbd{font-size:.72rem;color:var(--muted);margin-left:2px}
+.pnote{font-size:.66rem;font-weight:600;background:#6e747c;border-radius:3px;padding:5px 8px}
+.cbar{display:grid;grid-template-columns:auto;justify-items:center;gap:2px;font:700 .58rem 'JetBrains Mono',monospace}
+.cb2{position:relative;width:12px;height:46px;border:1px solid #d1d5db;background:linear-gradient(to bottom,#ffe14a 0%,#e1331a calc(var(--z) - 12%),#3a0000 calc(var(--z) - 1%),#000 var(--z),#001a5a calc(var(--z) + 1%),#1b58ff calc(var(--z) + 14%),#7fe8ff 100%)}
+.cb2 i{position:absolute;left:-4px;right:-4px;top:var(--z);height:0;border-top:1.5px solid #fff}
+.cu{font-size:.5rem;color:#e5e7eb}
+.stat{display:flex;align-items:center;gap:5px;font-size:.58rem;font-weight:700;color:#eef1f4;margin-right:6px}
+.ttc{background:var(--tile);border-radius:4px;padding:5px;display:flex;flex-direction:column;gap:4px}
+.ttch{font-size:.58rem;font-weight:700;letter-spacing:.04em}
+.ports{display:grid;grid-template-columns:repeat(3,1fr);gap:3px}
+.tbtn.port{display:flex;flex-direction:column;align-items:center;gap:1px;background:#6a7078;border:2px solid transparent;border-radius:4px;padding:3px 1px;font-size:.52rem;font-weight:700}
+.tbtn.port.sel{border-color:var(--blue);background:#56606b}
+.tbtn.exr2{background:#6a7078;border-radius:3px;padding:4px 6px;font-size:.62rem;text-align:left;display:flex;gap:4px;align-items:center}
+.tbtn.exr2 i{font-style:normal;margin-left:auto}
+.prf{font:700 .52rem 'JetBrains Mono',monospace;color:#e0f2fe}
+.tnote{font-size:.54rem;color:#e5e7eb;text-align:center;opacity:.85}
+.srev{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#0b1d26;border:1px solid #1d4a5e;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:.84rem;color:#bae6fd;font-weight:600}
+.srev .btn{text-decoration:none;display:inline-block}
+.wlinks{margin-top:10px;border:1px solid #1d4a5e;background:#0b1d26;border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.wl{font-size:.8rem;color:#bae6fd;font-weight:600}
+.wlinks a{color:var(--accent);font-weight:700;font-size:.86rem;text-decoration:none}
+.wlinks a:hover{text-decoration:underline}
+.phys{margin-top:12px;background:#0b1016;border:1px solid var(--line2);border-radius:14px;padding:8px}
+.phys svg{display:block;width:100%;height:auto;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+.phys .k{cursor:pointer}
+.phys .k:hover .kf{stroke:var(--accent)}
+.phys .k.hlk .kf{stroke:#fbbf24;stroke-width:4;animation:pk 1s ease-in-out infinite}
+@keyframes pk{50%{stroke-opacity:.25}}
+.phys .k.flash .kf{fill:#21465a}
+.rep{margin-top:12px}
+.rep table{width:100%;border-collapse:collapse;font-size:.84rem}
+.rep td{padding:5px 4px;border-bottom:1px solid var(--line)}
+.rep td:last-child{text-align:right;font:700 .82rem 'JetBrains Mono',monospace;color:#fff}
+.rep .calc td:last-child{color:var(--accent)}
+.interp{margin-top:8px;font-size:.84rem;color:var(--soft)}
+.interp b{color:#fff}
+.done{border:1px solid #1e5e46;background:#0c1a15;border-radius:10px;padding:10px 12px;margin-top:8px;font-size:.86rem;color:#d1fae5}
+.foot{color:var(--muted);font-size:.76rem;margin-top:14px;text-align:center}
+details.card{margin-top:12px}
+details.card summary{cursor:pointer;font-weight:700}
+details.card ul{margin:8px 0 0 0;padding-left:18px;color:var(--soft);font-size:.86rem}
+.legend{display:flex;flex-wrap:wrap;gap:10px;font-size:.74rem;color:var(--muted);margin-top:6px}
+.legend span b{color:var(--warn)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Pulmonary POCUS · Machine Skills</div>
+      <h1>Sonosite PX Echo Tutorial</h1>
+      <div class="sub">Practice the exact button presses for common cardiac Doppler measurements on the Sonosite PX (P5-1, Cardiac exam). Press the real control or touch panel button each step asks for.</div>
+    </div>
+    <a class="logo" href="https://www.pulmonarypocus.com" target="_top" title="Pulmonary POCUS"><img src="https://images.squarespace-cdn.com/content/v1/63013e6bdeceb945f6ef2c81/fa4452e4-b6ce-4a39-8305-3451556f8cf3/Pulmanary+Procus+Design+Final.jpg?format=300w" alt="Pulmonary POCUS logo"></a>
+  </header>
+
+  <div class="protos" id="protos"></div>
+
+  <div class="main">
+    <div>
+      <div class="touch" id="touch">
+        <div class="tp-top"><span class="tp-lab">PX touch panel</span><span class="tp-crumb" id="crumb"></span></div>
+        <div class="tpanel" id="tpanel"></div>
+      </div>
+      <div class="phys">
+        <svg id="panel" viewBox="0 0 1000 200" aria-label="Sonosite PX physical controls"></svg>
+        <div class="legend"><span><b>Yellow ring</b> = the next control to press</span><span>Click the touchpad to drag calipers, lines and boxes</span><span>Gain wheel scrolls the cine buffer when frozen</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" id="stepCard">
+        <div class="steph"><span class="stepn" id="stepn"></span><span class="stepn" id="ptitle" style="color:var(--muted)"></span></div>
+        <div class="phase" id="phase"></div>
+        <div class="bar"><i id="barI"></i></div>
+        <div id="startRev"></div>
+        <div id="pressTag"></div>
+        <p class="say" id="say"></p>
+        <p class="why" id="why"></p>
+        <div class="fb" id="fb"></div>
+        <div class="acts">
+          <button class="btn" id="back">Back</button>
+          <button class="btn primary" id="nextB">Next ›</button>
+          <button class="btn" id="restart">Restart</button>
+          <span class="kbd">or use ← → keys</span><label class="tog"><input type="checkbox" id="guide" checked> Highlight next button</label>
+        </div>
+        <div id="doneBox"></div>
+        <div id="labLinks"></div>
+        <details class="steps" id="stepsBox" open><summary>All steps <span>tap any step to jump to it</span></summary><div id="stepList" class="slist"></div></details>
+      </div>
+      <div class="card rep" id="rep">
+        <div class="ptitle">Report</div>
+        <table id="repT"><tbody><tr><td style="color:var(--muted)">Measurements appear here as you save them.</td><td></td></tr></tbody></table>
+        <div class="interp" id="interp"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <details class="card">
+    <summary>Key PX controls in one place</summary>
+    <ul>
+      <li><b>2D, C, M, D</b>: imaging modes. Press <b>D</b> once to show the D-line, press <b>D</b> again (or UPDATE) to start the Doppler sweep. <b>M</b> works the same way.</li>
+      <li><b>Doppler Mode</b> on the touch panel picks PW, CW or TDI (CW and TDI only in cardiac exam types).</li>
+      <li><b>Touchpad</b> moves the D-line, gate, color box, zoom box and calipers. <b>SELECT</b> switches calipers or moves to the next step of a measurement. <b>UPDATE</b> finishes an action, starts or stops the sweep, and switches focus between the 2D image and the sweep.</li>
+      <li><b>Freeze</b> (snowflake) freezes and unfreezes. When frozen the <b>GAIN</b> wheel scrolls the cine buffer.</li>
+      <li><b>CALCS</b> opens the analysis packages and saves measurements to the report. <b>CALIPER</b> gives quick measurements that are saved only on the image.</li>
+      <li><b>Save image</b> (camera) saves the image and the measurements to the report. <b>Save clip</b> saves a cine clip during live imaging.</li>
+      <li>In the <b>Focused Cardiac</b> exam the pages are named Left Heart, Right Heart, Volume Status and Great Vessels instead of the full cardiac package pages.</li>
+    </ul>
+  </details>
+
+  <div class="foot">Button sequences follow the Sonosite PX User Guide (P21894-09C). Labels can differ by software version and exam type. Values are teaching examples; thresholds follow ASE guidance. pulmonarypocus.com</div>
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));const sq=v=>v*v;
+const PHYS={tgc:'TGC',auto:'AUTO',gain:'GAIN wheel',depthUp:'DEPTH up',depthDn:'DEPTH down',select:'SELECT',update:'UPDATE',touchpad:'Touchpad',abc:'ABC',calcs:'CALCS',caliper:'CALIPER',saveImg:'Save image (camera)',saveClip:'Save clip',freeze:'Freeze (snowflake)',C:'C',M:'M',D:'D',twoD:'2D'};
+
+/* ---------------- touch panel pages ---------------- */
+const T=(h,k,b,x)=>Object.assign({h,k,b:b||[h]},x||{});
+const TP={
+ hello:{crumb:'Startup',full:true},
+ endq:{crumb:'End study',dialog:true},
+ pform:{crumb:'Patient form',tiles:[T('Patient','fields',['Last name','First name','ID']),T('Exam data','fields',['Height','Weight','BSA (auto)']),T('Transducer and exam','btns',['Transducer / Exam']),T('Ready','btns',['Scan'])]},
+ exam:{crumb:'Select transducer and exam',note:'Triple Transducer Connect: the three transducers on this cart are shown. Double tap an exam type to start scanning.',tiles:[T('P5-1 · Phased array','btns',['P5-1|Abdomen','P5-1|Pediatric Abdomen','P5-1|Cardiac','P5-1|Focused Cardiac','P5-1|Pediatric Cardiac','P5-1|Lung','P5-1|OB','P5-1|Orbital','P5-1|Transcranial','P5-1|VExUS']),T('C5-1 · Curved array','btns',['C5-1|Abdomen','C5-1|Early OB','C5-1|Gynecology','C5-1|Lung','C5-1|MSK','C5-1|Nerve','C5-1|OB','C5-1|Procedural Abdomen','C5-1|Spine','C5-1|VExUS']),T('C10-3 · Small curved','btns',['C10-3|Abdomen','C10-3|Gynecology','C10-3|Lung','C10-3|MSK','C10-3|Nerve','C10-3|Spine','C10-3|VExUS']),T('L15-4 · Linear','btns',['L15-4|Arterial','L15-4|Breast','L15-4|Carotid','L15-4|MSK','L15-4|Nerve','L15-4|Superficial','L15-4|Venous']),T('L12-3 · Linear','btns',['L12-3|Arterial','L12-3|Breast','L12-3|Carotid','L12-3|Lung','L12-3|MSK','L12-3|Nerve','L12-3|Ophthalmic','L12-3|PIV','L12-3|Superficial','L12-3|Venous']),T('T8-3 · TEE','btns',['T8-3|Cardiac','T8-3|Cardiac Resuscitation','T8-3|Lung'])]},
+ scan2d:{crumb:'2D · P5-1 Cardiac',tiles:[T('Optimize','seg',['Res','Gen','Pen']),T('THI','toggle'),T('Display Format','seg',['DF 1/3','DF 1/2','DF 2/3','DF SxS']),T('Dual','seg',['L','R']),T('Zoom','icon',['Zoom']),T('Dynamic Range','arrows',['DR ▲','DR ▼']),T('Sector','toggle'),T('Centerline','toggle'),T('Procedure Mode','toggle')],more:[T('Focus','arrows',['Focus ▲','Focus ▼']),T('Power','arrows',['Power ▲','Power ▼']),T('Auto Gain Adjust','arrows',['AG ▲','AG ▼']),T('ECG','icon',['ECG']),T('Print','icon',['Print'])]},
+ zoom:{crumb:'2D · Zoom box active',tiles:[T('Zoom','icon',['Zoom']),T('Unzoom','icon',['Unzoom']),T('Optimize','seg',['Res','Gen','Pen']),T('THI','toggle'),T('Dynamic Range','arrows',['DR ▲','DR ▼']),T('Sector','toggle')]},
+ color:{crumb:'Color · P5-1 Cardiac',tiles:[T('Scale (PRF)','arrows',['Color Scale ▲','Color Scale ▼'],{v:'col'}),T('Baseline','arrows',['Color Baseline ▲','Color Baseline ▼'],{v:'colb'}),T('Invert','toggle'),T('Steer','seg',['Steer L','Steer C','Steer R']),T('Wall Filter','seg',['WF Low','WF Med','WF High']),T('Color Type','seg',['Color','Var']),T('Color Flow','seg',['High','Med','Low']),T('Show/Hide Color','toggle'),T('Zoom','icon',['Zoom'])],more:[T('Color Compare','toggle'),T('Power','arrows',['Power ▲','Power ▼'])]},
+ doppler:{crumb:'Doppler · P5-1 Cardiac',tiles:[T('Doppler Mode','seg',['PW','CW','TDI']),T('Scale (PRF)','arrows',['Scale ▲','Scale ▼'],{chk:'HPRF',v:'dop'}),T('Baseline','arrows',['Baseline ▲','Baseline ▼'],{v:'dopb'}),T('Invert','toggle'),T('Steer','seg',['Steer L','Steer C','Steer R']),T('Sweep Speed','seg',['Slow','Med','Fast']),T('Wall Filter','seg',['WF Low','WF Med','WF High']),T('Sample Volume','arrows',['Gate ▲','Gate ▼'],{v:'gate'}),T('Angle Correct','icon',['Angle Correct'])],more:[T('Display Format','seg',['DF 1/3','DF 1/2','DF 2/3','DF SxS']),T('Simultaneous','toggle'),T('Volume','arrows',['Volume ▲','Volume ▼']),T('Auto Trace','icon',['Auto Trace']),T('Power','arrows',['Power ▲','Power ▼'])]},
+ mmode:{crumb:'M Mode · P5-1 Cardiac',tiles:[T('Sweep Speed','seg',['Slow','Med','Fast']),T('Display Format','seg',['DF 1/3','DF 1/2','DF 2/3','DF SxS']),T('Anatomical M','toggle'),T('Optimize','seg',['Res','Gen','Pen']),T('THI','toggle'),T('Zoom','icon',['Zoom']),T('Dynamic Range','arrows',['DR ▲','DR ▼'])]},
+ calcs:{crumb:'Calcs · Cardiac package',g:[{h:'Left heart',b:['LV Function/EF','Function','Left Dimensions','Assisted CO']},{h:'Valves',b:['Aortic Valve','Mitral Valve','Tricuspid/Pulmonic','Valves','AVA']},{h:'Right heart',b:['RV Function','Right Dimensions']},{h:'Other',b:['Diastology','Volume Status','Great Vessels','Qp:Qs','Dimensions','HR']}]},
+ lvf:{crumb:'Calcs › LV Function/EF',g:[{h:'EF',b:['LVDd','LVDs']},{h:'CO',b:['LVOT D','LVOT VTI ▾','CO HR']},{h:'Apical EF',b:['A4Cd Vol','A4Cs Vol','A2Cd Vol','A2Cs Vol']},{h:'Left FAC',b:['LV EDA','LV ESA']}]},
+ av:{crumb:'Calcs › Aortic Valve',g:[{h:'LVOT',b:['LVOT VMax','LVOT VTI ▾','CO HR']},{h:'AS',b:['AV VMax','AV VTI ▾','AVA HR','LVET']},{h:'AI',b:['AI PHT','AI VTI']},{h:'2D',b:['AI Vena Con','AVA Planim','LVOT D']}]},
+ dia:{crumb:'Calcs › Diastology',g:[{h:'TDI',b:["Sep e'","Sep a'","Lat e'","Lat a'"]},{h:'MV',b:['MV E','MV Decel','MV A','MV Adur','IVRT']},{h:'Pulmonary Vein',b:['P Vein S','P Vein D','P Vein A']},{h:'RVSP',b:['TR VMax','RAP']},{h:'LA Vol',b:['LA Vol A4C','LA Vol A2C']}]},
+ mv:{crumb:'Calcs › Mitral Valve',g:[{h:'Inflow',b:['MV E','MV A','MV Decel Time']},{h:'MS',b:['MV Ann D','MV VTI ▾','HR (MVA)','MV PHT']},{h:'MR',b:['MV dP/dt']},{h:'2D',b:['MVA Planim','MR Vena Con']}]},
+ tp:{crumb:'Calcs › Tricuspid/Pulmonic',g:[{h:'RVSP',b:['TR VMax','RAP']},{h:'PV',b:['PV AT','PV VTI','PV VMax']},{h:'TV',b:['TV VTI','TV E','TV A','TV PHT']}]},
+ func:{crumb:'Calcs › Function',g:[{h:'M Mode',b:['LVDd','LVDs','MAPSE','TAPSE','EPSS','LVET']}]},
+ vexus:{crumb:'Calcs › VExUS',g:[{h:'IVC',b:['Dilated','Non-dilated']},{h:'Hepatic vein',b:['Hepatic vein ▾']},{h:'Portal vein',b:['Portal vein ▾']},{h:'Intrarenal vein',b:['Intrarenal vein ▾']},{h:'Measurements',b:['IVC Max D','Pulsatility Fraction']}]},
+ hvl:{crumb:'Calcs › VExUS › Hepatic vein',g:[{h:'Hepatic vein pattern',b:['S > D (normal)','S < D (mild)','S reversal (severe)']}]},
+ pvl:{crumb:'Calcs › VExUS › Portal vein',g:[{h:'Portal vein pattern',b:['PF < 30% (normal)','PF 30–49% (mild)','PF ≥ 50% (severe)']}]},
+ irl:{crumb:'Calcs › VExUS › Intrarenal vein',g:[{h:'Intrarenal vein pattern',b:['Continuous (normal)','Biphasic (mild)','Monophasic (severe)']}]},
+ rap:{crumb:'Calcs › RAP',g:[{h:'RA pressure (mmHg)',b:['3','8','15']}]},
+ vti:{crumb:'Calcs › VTI method',g:[{h:'Trace method',b:['Manual Trace','Auto Measure']}]},
+ measuring:{crumb:'Measuring · use touchpad and SELECT',g:[{h:'Results',b:['Clear Image','Delete All']}]}
+};
+
+/* ---------------- protocols ---------------- */
+/* step: t = target ('p:id' physical or 't:Label' touch), say, why, set{} scene changes, tp = touch page after, res = [label,value,unit] */
+const S=(t,say,why,set,tp,res,anim)=>({t,say,why,set:set||{},tp,res,anim});
+const VIEWS={plax:'PLAX',a5c:'Apical 5-chamber',a4c:'Apical 4-chamber',rvf:'RV-focused apical 4',psax:'PSAX mitral level'};
+const P=[];
+
+P.push({id:'setup',name:'Start a study',intro:'End the last patient, open a new patient form with height and weight (needed for SI, CI and indexed values), then pick P5-1 Cardiac.',scene:{view:'a4c',mode:'2d',exam:'L15-4 MSK'},tp:'scan2d',steps:[
+S('t:END STUDY','Tap END STUDY in the top bar of the touch panel.','Always end the previous study first. Otherwise the new measurements merge into the last patient\'s report.',{},'endq'),
+S('t:Yes','Tap Yes to close the study. The startup screen appears.','',{},'hello'),
+S('t:Enter','On the startup screen, tap Enter (patient information).','You can also tap the green + New Patient tile while scanning. Everything you save is linked to this patient.',{},'pform'),
+S('t:Height','Tap Height and enter it.','Height and weight let the system calculate BSA, which it needs for stroke index, cardiac index, AVA index and LA volume index.',{},'pform',['__h','1','']),
+Object.assign(S('t:Weight','Tap Weight and enter it.','BSA is calculated automatically.',{},'pform'),{multi:[['__w','1',''],['BSA','1.9','m²']]}),
+S('t:Transducer / Exam','Tap the transducer and exam button.','',{},'exam'),
+S('t:P5-1|Cardiac','Double tap Cardiac on the P5-1 (phased array) card.','Cardiac gives the full cardiac package plus CW, TDI and HPRF. Focused Cardiac has a shorter package (Left Heart, Right Heart, Volume Status).',{exam:'P5-1 Cardiac'},'scan2d')
+]});
+
+const lvotD=(pg)=>[
+S('p:freeze','Press Freeze.','Freeze the PLAX loop first. You will pick the frame next.',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to scroll the cine to mid systole, aortic valve fully open.','When frozen, the GAIN wheel scrolls the cine buffer frame by frame.',{},null),
+S('p:calcs','Press CALCS.','CALCS opens the cardiac package. Measurements made here go to the report.',{},'calcs'),
+S('t:'+pg[0],'Tap '+pg[0]+'.','',{},pg[1]),
+S('t:LVOT D','Tap LVOT D.','A distance caliper appears.',{ov:{k:'dist',s:0,what:'lvot'}},'measuring'),
+S('p:touchpad','Drag on the touchpad to place the first caliper on the septal side, inner edge, within 0.5 cm of the aortic annulus.','Measure inner edge to inner edge in mid systole, parallel to the annulus. Most LVOT diameters are 1.8 to 2.4 cm.',{ov:{k:'dist',s:1,what:'lvot'}},null),
+S('p:select','Press SELECT to activate the second caliper.','',{ov:{k:'dist',s:2,what:'lvot'}},null),
+S('p:touchpad','Drag the second caliper to the inner edge of the posterior (anterior mitral leaflet) side.','The diameter is squared in the area formula, so a 1 mm error changes stroke volume by about 10 percent.',{ov:{k:'dist',s:3,what:'lvot'}},null,['LVOT D','2.0','cm']),
+S('p:saveImg','Press Save image (camera) to save LVOT D to the report.','',{saved:true},null)
+];
+const vtiTrace=(lab,pg,res,extra)=>[
+S('p:freeze','Press Freeze at end expiration with 3 or more clean beats.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:'+pg[0],'Tap '+pg[0]+'.','',{},pg[1]),
+S('t:'+lab+' ▾','Tap the arrow on '+lab+' and choose a trace method.','Manual Trace lets you follow the modal velocity yourself. Auto Measure traces between two calipers you place.',{},'vti'),
+S('t:Manual Trace','Tap Manual Trace.','',{ov:{k:'trace',s:0,p:0}},'measuring'),
+S('p:touchpad','Drag the caliper to the start of one waveform (onset of flow).','Trace only one beat. A trace covering more than one beat is not valid.',{ov:{k:'trace',s:1,p:0}},null),
+S('p:select','Press SELECT. A pencil icon means the start point is set.','',{ov:{k:'trace',s:2,p:0}},null),
+S('p:touchpad','Trace along the dense modal velocity (the bright edge) back to the baseline.','Follow the dense envelope, not the faint fuzz at the edge. To fix it, trace backward to erase.',{ov:{k:'trace',s:3,p:1}},null,res,'trace'),
+...(extra||[]),
+S('p:saveImg','Press Save image to save the trace to the report.','',{saved:true},null)
+];
+
+P.push({id:'lvot',name:'LVOT VTI and CO',intro:'Stroke volume = LVOT area × LVOT VTI. Measure the LVOT diameter in PLAX, then the LVOT VTI with PW in the apical 5-chamber view.',scene:{view:'plax',mode:'2d'},tp:'scan2d',steps:[
+S('t:Zoom','In PLAX, tap Zoom (magnifying glass) on the touch panel.','Zooming on the LVOT makes the diameter measurement far more precise.',{zoomBox:true},'zoom'),
+S('p:touchpad','Drag on the touchpad to put the zoom box over the LVOT and aortic valve.','Press SELECT if you want to resize the box instead of moving it.',{},null),
+S('t:Zoom','Tap Zoom again to zoom in.','',{zoomBox:false,zoom:true},'scan2d'),
+...lvotD(['LV Function/EF','lvf']),
+S('p:freeze','Press Freeze to return to live imaging.','',{frozen:false,ov:null},'scan2d'),
+S('p:twoD','Press 2D to leave zoom, then tilt to the apical 5-chamber view.','',{zoom:false,view:'a5c'},'scan2d'),
+S('p:D','Press D. The D-line appears on the 2D image.','',{mode:'pw',dline:true,target:'lvot',wave:'lvot'},'doppler'),
+S('t:PW','On Doppler Mode, tap PW.','PW samples one small gate, so you know the velocity came from the LVOT.',{},'doppler'),
+S('p:touchpad','Drag on the touchpad to move the D-line through the LVOT and the gate about 0.5 cm below the aortic valve.','Keep the beam parallel to flow. If you see a valve click, move the gate a little toward the apex.',{gateSet:true},null),
+S('p:D','Press D again to start the Doppler sweep.','UPDATE also starts and stops the sweep.',{scroll:true},'doppler'),
+S('t:Baseline ▲','Tap Baseline ▲ (Doppler Baseline) to give the downward LVOT signal more room.','LVOT flow goes away from the probe, so it sits below the baseline. Adjust Scale so the envelope fills about two thirds of the display.',{},'doppler'),
+...vtiTrace('LVOT VTI',['LV Function/EF','lvf'],['LVOT VTI','20','cm'],[
+S('t:CO HR','Tap CO HR to measure heart rate on the same trace.','The system needs HR for cardiac output.',{ov:{k:'hr',s:1}},'measuring'),
+S('p:touchpad','Drag the first caliper to the peak of one beat.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'hr',s:2}},null),
+S('p:touchpad','Drag the second caliper to the same point on the next beat.','',{ov:{k:'hr',s:3}},null,['HR','75','bpm'])
+])
+],calc:r=>{const d=+r['LVOT D'],v=+r['LVOT VTI'],hr=+r['HR'];const out=[];if(d&&v){const sv=Math.PI*(d/2)**2*v;out.push(['SV',sv.toFixed(0),'mL']);if(hr)out.push(['CO',(sv*hr/1000).toFixed(1),'L/min'],['CI',(sv*hr/1000/1.9).toFixed(1),'L/min/m²']);}return out;},
+interp:'Normal LVOT VTI is about 18 to 22 cm. Below about 15 cm suggests low stroke volume. Repeat VTI after a fluid bolus or passive leg raise: a rise of 10 to 15 percent suggests fluid responsiveness.'});
+
+P.push({id:'simpson',name:"Simpson's EF",intro:"Biplane method of discs (modified Simpson's): trace the LV at end diastole and end systole in the apical 4- and 2-chamber views. The PX gives A4C EF, A2C EF, biplane volumes and biplane EF.",scene:{view:'a4c',mode:'2d'},tp:'scan2d',steps:[
+S('p:freeze','In a non-foreshortened apical 4-chamber view, press Freeze.','The LV should look long and bullet shaped with the apex at the top. A foreshortened view underestimates volume and overestimates EF. Turn on the ECG to time frames.',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to end diastole: the first frame after mitral valve closure, when the LV is largest.','On the ECG this is at the R wave.',{},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:LV Function/EF','Tap LV Function/EF.','',{},'lvf'),
+S('t:A4Cd Vol','Tap A4Cd Vol under Apical EF.','',{},null),
+S('p:touchpad','Put the caliper on the septal mitral annulus hinge point.','',{},null),
+S('p:select','Press SELECT to set the start point.','',{},null),
+S('p:touchpad','Trace the endocardial border up to the apex and back down to the opposite annulus. The PX closes the trace and draws the long axis.','Follow the blood-tissue border. Leave papillary muscles and trabeculations inside the cavity. The system splits the LV into 20 discs along the long axis.',{},null,['A4Cd Vol','120','mL']),
+S('p:touchpad','Drag the apex end of the long-axis line to the true apex if it is off.','The long axis sets the disc height, so a short axis underestimates volume.',{},null),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:gain','Turn the GAIN wheel to end systole: the last frame before the mitral valve opens, when the LV is smallest.','',{},null),
+S('t:A4Cs Vol','Tap A4Cs Vol under Apical EF.','',{},null),
+S('p:touchpad','Put the caliper on the septal mitral annulus hinge point.','',{},null),
+S('p:select','Press SELECT to set the start point.','',{},null),
+S('p:touchpad','Trace the endocardial border up to the apex and back down to the opposite annulus. The PX closes the trace and draws the long axis.','Follow the blood-tissue border. Leave papillary muscles and trabeculations inside the cavity. The system splits the LV into 20 discs along the long axis.',{},null,['A4Cs Vol','55','mL']),
+S('p:touchpad','Drag the apex end of the long-axis line to the true apex if it is off.','The long axis sets the disc height, so a short axis underestimates volume.',{},null),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live, then rotate the probe about 60° counterclockwise to the apical 2-chamber view.','The 2-chamber view shows the anterior and inferior walls, with no RV in view.',{frozen:false},'scan2d'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to end diastole.','',{},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:LV Function/EF','Tap LV Function/EF.','',{},'lvf'),
+S('t:A2Cd Vol','Tap A2Cd Vol under Apical EF.','',{},null),
+S('p:touchpad','Put the caliper on the inferior mitral annulus hinge point.','',{},null),
+S('p:select','Press SELECT to set the start point.','',{},null),
+S('p:touchpad','Trace the endocardial border up to the apex and back down to the opposite annulus. The PX closes the trace and draws the long axis.','Follow the blood-tissue border. Leave papillary muscles and trabeculations inside the cavity. The system splits the LV into 20 discs along the long axis.',{},null,['A2Cd Vol','110','mL']),
+S('p:touchpad','Drag the apex end of the long-axis line to the true apex if it is off.','The long axis sets the disc height, so a short axis underestimates volume.',{},null),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:gain','Turn the GAIN wheel to end systole.','',{},null),
+S('t:A2Cs Vol','Tap A2Cs Vol under Apical EF.','',{},null),
+S('p:touchpad','Put the caliper on the inferior mitral annulus hinge point.','',{},null),
+S('p:select','Press SELECT to set the start point.','',{},null),
+S('p:touchpad','Trace the endocardial border up to the apex and back down to the opposite annulus. The PX closes the trace and draws the long axis.','Follow the blood-tissue border. Leave papillary muscles and trabeculations inside the cavity. The system splits the LV into 20 discs along the long axis.',{},null,['A2Cs Vol','50','mL']),
+S('p:touchpad','Drag the apex end of the long-axis line to the true apex if it is off.','The long axis sets the disc height, so a short axis underestimates volume.',{},null),
+S('p:saveImg','Press Save image.','',{saved:true},null)
+],calc:r=>{const o=[];const a=+r['A4Cd Vol'],b=+r['A4Cs Vol'],c=+r['A2Cd Vol'],d=+r['A2Cs Vol'];if(a&&b)o.push(['A4C EF',Math.round((a-b)/a*100),'%']);if(c&&d)o.push(['A2C EF',Math.round((c-d)/c*100),'%']);if(a&&b&&c&&d){const ed=(a+c)/2,es=(b+d)/2;o.push(['Biplane EDV',Math.round(ed),'mL'],['Biplane ESV',Math.round(es),'mL'],['Biplane EF',Math.round((ed-es)/ed*100),'%'],['EDV index',Math.round(ed/1.9),'mL/m²']);}return o;},
+interp:"ASE 2015: normal LVEF is about 52 to 72% in men and 54 to 74% in women. Normal LV end-diastolic volume index is up to 74 mL/m² in men and 61 mL/m² in women. Here biplane EF is about 54% with a normal EDV index. The PX calculates biplane volumes from the disc diameters in both views; the values here are simplified teaching examples."});
+P.push({id:'dia',name:'Diastology',intro:'Mitral inflow with PW at the leaflet tips, then septal and lateral e\' with TDI. The PX calculates E/A and E/e\'.',scene:{view:'a4c',mode:'2d'},tp:'scan2d',steps:[
+S('p:D','In apical 4-chamber, press D.','',{mode:'pw',dline:true,target:'mvtips',wave:'mv'},'doppler'),
+S('t:PW','On Doppler Mode, tap PW.','',{},'doppler'),
+S('p:touchpad','Move the D-line through the mitral valve and the gate to the tips of the open leaflets.','Use a 1 to 3 mm gate at the leaflet tips. At the annulus, E and A read lower.',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+S('t:Fast','On Sweep Speed, tap Fast.','A faster sweep (50 to 100 mm/s) spreads the E and A waves for accurate timing.',{},'doppler'),
+S('p:freeze','Press Freeze at end expiration.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Diastology','Tap Diastology.','',{},'dia'),
+S('t:MV E','Tap MV E.','A single velocity caliper appears.',{ov:{k:'vel',s:1,at:'E'}},'measuring'),
+S('p:touchpad','Drag the caliper to the peak of the E wave.','',{},null,['MV E','80','cm/s']),
+S('t:MV A','Tap MV A.','',{ov:{k:'vel',s:1,at:'A'}},'measuring'),
+S('p:touchpad','Drag the caliper to the peak of the A wave.','',{},null,['MV A','60','cm/s']),
+S('t:MV Decel','Tap MV Decel.','',{ov:{k:'decel',s:1}},'measuring'),
+S('p:touchpad','Put the first caliper on the E peak.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'decel',s:2}},null),
+S('p:touchpad','Drag the second caliper down the E deceleration slope to the baseline.','Normal deceleration time is roughly 160 to 240 ms. Short DT with high E/A suggests restrictive filling.',{ov:{k:'decel',s:3}},null,['MV Decel','190','ms']),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to return to live imaging.','',{frozen:false,ov:null},'doppler'),
+S('t:TDI','On Doppler Mode, tap TDI.','TDI measures slow, high amplitude tissue motion instead of blood flow.',{mode:'tdi',wave:'tdi',target:'septal'},'doppler'),
+S('p:update','Press UPDATE to switch focus to the D-line on the 2D image.','',{},null),
+S('p:touchpad','Move the gate onto the septal mitral annulus.','Keep the annulus inside the gate through the whole cycle, beam parallel to annular motion.',{gateSet:true},null),
+S('p:update','Press UPDATE to switch focus back to the sweep.','',{},null),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Diastology','Tap Diastology.','',{},'dia'),
+S("t:Sep e'","Tap Sep e'.",'',{ov:{k:'vel',s:1,at:'e'}},'measuring'),
+S('p:touchpad',"Drag the caliper to the peak of the early diastolic e' wave (below the baseline).",'',{},null,["Sep e'",'7','cm/s']),
+S('p:freeze','Press Freeze to go live.','',{frozen:false,ov:null},'doppler'),
+S('p:update','Press UPDATE to focus the D-line.','',{},null),
+S('p:touchpad','Move the gate to the lateral mitral annulus.','',{target:'lateral',wave:'tdil'},null),
+S('p:update','Press UPDATE to return to the sweep.','',{},null),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Diastology','Tap Diastology.','',{},'dia'),
+S("t:Lat e'","Tap Lat e'.",'',{ov:{k:'vel',s:1,at:'e'}},'measuring'),
+S('p:touchpad',"Drag the caliper to the lateral e' peak.",'',{},null,["Lat e'",'10','cm/s']),
+S('p:saveImg','Press Save image. The system reports E/A and E/e\'.','',{saved:true},null)
+],calc:r=>{const o=[];const E=+r['MV E'],A=+r['MV A'],s=+r["Sep e'"],l=+r["Lat e'"];if(E&&A)o.push(['MV E/A',(E/A).toFixed(2),'']);if(E&&s)o.push(["Sep E/e'",(E/s).toFixed(1),'']);if(E&&l)o.push(["Lat E/e'",(E/l).toFixed(1),'']);if(E&&s&&l)o.push(["Average E/e'",(E/((s+l)/2)).toFixed(1),'']);return o;},
+interp:'ASE 2016: abnormal if average E/e\' > 14, septal e\' < 7 or lateral e\' < 10 cm/s, TR velocity > 2.8 m/s, LA volume index > 34 mL/m². Here only septal e\' is borderline, so filling pressures are likely normal. Add TR VMax and LA Vol (both on the Diastology page) to complete the algorithm.'});
+
+P.push({id:'tr',name:'TR and RVSP',intro:'Use color to find the TR jet, line it up with CW, measure TR VMax and add RA pressure. RVSP = 4V² + RAP.',scene:{view:'rvf',mode:'2d'},tp:'scan2d',steps:[
+S('p:C','In the RV-focused apical 4-chamber view, press C.','Color shows where the jet goes so you can align the CW line with it.',{mode:'color',colorJet:'tr'},'color'),
+S('p:touchpad','Drag the color box over the tricuspid valve and right atrium.','Keep the box small for a higher frame rate.',{},null),
+S('p:D','Press D.','',{mode:'cw',dline:true,target:'tr',wave:'tr'},'doppler'),
+S('t:CW','On Doppler Mode, tap CW.','TR jets are usually 2 to 4 m/s, far above the PW limit at this depth.',{},'doppler'),
+S('p:touchpad','Move the CW line straight through the TR jet.','Sample several windows (RV-focused, parasternal RV inflow, subcostal) and use the highest clean velocity.',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true,mode:'cw'},'doppler'),
+S('t:Scale ▲','Tap Scale ▲ until the whole jet fits (at least 4 m/s).','',{},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Tricuspid/Pulmonic','Tap Tricuspid/Pulmonic.','',{},'tp'),
+S('t:TR VMax','Tap TR VMax under RVSP.','',{ov:{k:'vel',s:1,at:'tr'}},'measuring'),
+S('p:touchpad','Drag the caliper to the peak of the dense TR envelope.','Ignore the faint feathery tip. Measure the edge of the dense signal.',{},null,['TR VMax','2.9','m/s']),
+S('t:RAP','Tap RAP.','',{},'rap'),
+S('t:8','Choose the RA pressure from your IVC assessment (here 8 mmHg).','IVC ≤ 2.1 cm and collapses > 50% = 3 mmHg; dilated and collapses < 50% = 15 mmHg; anything in between = 8 mmHg.',{},'tp',['RAP','8','mmHg']),
+S('p:saveImg','Press Save image to save RVSP to the report.','',{saved:true},null)
+],calc:r=>{const v=+r['TR VMax'],ra=+r['RAP'];if(v&&!isNaN(ra))return [['TR peak gradient',(4*v*v).toFixed(0),'mmHg'],['RVSP',(4*v*v+ra).toFixed(0),'mmHg']];return [];},
+interp:'TR velocity above 2.8 m/s suggests pulmonary hypertension is possible (ASE 2016 / ESC 2022 use 2.8 m/s). RVSP here is about 42 mmHg. Underestimation is common when the beam is not parallel to the jet.'});
+
+P.push({id:'as',name:'Aortic stenosis',intro:'Three measurements make the continuity equation: LVOT D (2D), LVOT VTI (PW) and AV VTI (CW). AVA = LVOT area × LVOT VTI ÷ AV VTI.',scene:{view:'plax',mode:'2d',zoom:true},tp:'scan2d',steps:[
+...lvotD(['Aortic Valve','av']),
+S('p:freeze','Press Freeze to go live, press 2D, then move to the apical 5-chamber view.','',{frozen:false,ov:null,zoom:false,view:'a5c'},'scan2d'),
+S('p:D','Press D.','',{mode:'pw',dline:true,target:'lvot',wave:'lvot'},'doppler'),
+S('t:PW','Tap PW.','',{},'doppler'),
+S('p:touchpad','Put the gate in the LVOT just below the valve, where flow is laminar.','In AS, flow accelerates close to the valve. If the PW envelope gets fuzzy, step the gate back toward the apex.',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+...vtiTrace('LVOT VTI',['Aortic Valve','av'],['LVOT VTI','20','cm']),
+S('p:freeze','Press Freeze to go live.','',{frozen:false,ov:null},'doppler'),
+S('t:CW','Tap CW.','',{mode:'cw',wave:'as',target:'av'},'doppler'),
+S('p:update','Press UPDATE to focus the D-line.','',{},null),
+S('p:touchpad','Align the CW line through the aortic valve.','Also check right parasternal and suprasternal windows. Report the highest velocity from any window.',{gateSet:true},null),
+S('p:update','Press UPDATE to return to the sweep.','',{},null),
+S('t:Scale ▲','Tap Scale ▲ so the scale shows at least 5 m/s.','',{},'doppler'),
+...vtiTrace('AV VTI',['Aortic Valve','av'],['AV VTI','100','cm'],[]).map((s,i)=>i===7?Object.assign({},s,{res:null,multi:[['AV VTI','100','cm'],['AV VMax','4.3','m/s'],['AV Mean PG','45','mmHg']]}):s)
+],calc:r=>{const d=+r['LVOT D'],l=+r['LVOT VTI'],a=+r['AV VTI'];const o=[];if(d&&l&&a){o.push(['AVA (VTI)',(Math.PI*(d/2)**2*l/a).toFixed(2),'cm²']);o.push(['Dimensionless index',(l/a).toFixed(2),''])}if(r['AV VMax'])o.push(['AV peak gradient',(4*(+r['AV VMax'])**2).toFixed(0),'mmHg']);return o;},
+interp:'Severe AS (ASE/EACVI): VMax ≥ 4 m/s, mean gradient ≥ 40 mmHg, AVA < 1.0 cm², dimensionless index < 0.25. This example is severe on all four. If AVA is small but gradients are low, think low flow (check SVI < 35 mL/m²).'});
+
+P.push({id:'ai',name:'Aortic regurgitation',intro:'Vena contracta from color in PLAX, then pressure half time from the CW AI jet in apical 5-chamber.',scene:{view:'plax',mode:'2d'},tp:'scan2d',steps:[
+S('p:C','In PLAX, press C.','',{mode:'color',colorJet:'ai'},'color'),
+S('p:touchpad','Drag the color box over the aortic valve and LVOT. Zoom if you can.','',{},null),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to the diastolic frame with the widest jet neck.','',{},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Aortic Valve','Tap Aortic Valve.','',{},'av'),
+S('t:AI Vena Con','Tap AI Vena Con.','',{ov:{k:'dist',s:1,what:'aivc'}},'measuring'),
+S('p:touchpad','Place the first caliper on one edge of the narrowest jet neck, just below the valve.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'dist',s:2,what:'aivc'}},null),
+S('p:touchpad','Place the second caliper on the other edge.','Vena contracta < 0.3 cm is mild, > 0.6 cm is severe.',{ov:{k:'dist',s:3,what:'aivc'}},null,['AI Vena Con','0.4','cm']),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live, then move to the apical 5-chamber view.','',{frozen:false,ov:null,view:'a5c',mode:'color'},'color'),
+S('p:D','Press D.','',{mode:'cw',dline:true,target:'ai',wave:'ai'},'doppler'),
+S('t:CW','Tap CW.','',{},'doppler'),
+S('p:touchpad','Align the CW line with the AI jet.','',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+S('t:Baseline ▼','Tap Baseline ▼ so the diastolic AI signal (toward the probe, above the baseline) fits.','',{},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Aortic Valve','Tap Aortic Valve.','',{},'av'),
+S('t:AI PHT','Tap PHT under AI.','',{ov:{k:'pht',s:1,w:'ai'}},'measuring'),
+S('p:touchpad','Put the first caliper on the peak AI velocity at the start of diastole.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'pht',s:2,w:'ai'}},null),
+S('p:touchpad','Drag the second caliper along the deceleration slope to end diastole.','A steep slope (short PHT) means aortic and LV diastolic pressures equalize quickly, as in severe or acute AI.',{ov:{k:'pht',s:3,w:'ai'}},null,['AI PHT','380','ms']),
+S('p:saveImg','Press Save image.','',{saved:true},null)
+],calc:()=>[],
+interp:'AI PHT > 500 ms suggests mild AI, < 200 ms suggests severe. Vena contracta > 0.6 cm is severe. Holodiastolic flow reversal in the descending aorta (PW, suprasternal) also supports severe AI. This example is moderate.'});
+
+P.push({id:'ms',name:'Mitral stenosis',intro:'Planimetry in PSAX, then CW through the mitral valve for pressure half time (MVA = 220 ÷ PHT) and mean gradient from the MV VTI trace.',scene:{view:'psax',mode:'2d'},tp:'scan2d',steps:[
+S('p:freeze','In PSAX at the leaflet tips, press Freeze.','',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to mid diastole, when the orifice is widest.','',{},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Mitral Valve','Tap Mitral Valve.','',{},'mv'),
+S('t:MVA Planim','Tap MVA Planim.','An area trace caliper appears.',{ov:{k:'poly',s:1}},'measuring'),
+S('p:touchpad','Move the caliper to the edge of the orifice.','',{},null),
+S('p:select','Press SELECT to set the start point.','',{ov:{k:'poly',s:2}},null),
+S('p:touchpad','Trace the inner edge of the orifice all the way around.','Trace the true tips, not the body of the leaflets. Too basal a plane overestimates area.',{ov:{k:'poly',s:3}},null,['MVA Planim','1.2','cm²']),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live, then move to apical 4-chamber.','',{frozen:false,ov:null,view:'a4c'},'scan2d'),
+S('p:D','Press D.','',{mode:'cw',dline:true,target:'mvtips',wave:'ms'},'doppler'),
+S('t:CW','Tap CW.','',{},'doppler'),
+S('p:touchpad','Align the CW line through the mitral inflow jet (use color first if needed).','',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Mitral Valve','Tap Mitral Valve.','',{},'mv'),
+S('t:MV PHT','Tap MV PHT.','',{ov:{k:'pht',s:1,w:'ms'}},'measuring'),
+S('p:touchpad','Put the first caliper on the E peak.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'pht',s:2,w:'ms'}},null),
+S('p:touchpad','Drag the second caliper along the E wave deceleration slope.','If the early slope is steeper than the rest, skip it and follow the main mid-diastolic slope.',{ov:{k:'pht',s:3,w:'ms'}},null,['MV PHT','200','ms']),
+S('t:MV VTI ▾','Tap the arrow on MV VTI and pick Manual Trace.','',{},'vti'),
+S('t:Manual Trace','Tap Manual Trace.','',{ov:{k:'trace',s:0,p:0}},'measuring'),
+S('p:touchpad','Drag the caliper to the start of one diastolic inflow signal.','',{ov:{k:'trace',s:1,p:0}},null),
+S('p:select','Press SELECT to start the trace.','',{ov:{k:'trace',s:2,p:0}},null),
+S('p:touchpad','Trace the inflow envelope to the end of diastole.','In atrial fibrillation, average 5 or more beats.',{ov:{k:'trace',s:3,p:1}},null,null,'trace'),
+S('p:saveImg','Press Save image.','',{saved:true},null)
+].map(s=>s.anim==='trace'?Object.assign(s,{multi:[['MV Mean PG','9','mmHg']]}):s),
+calc:r=>{const p=+r['MV PHT'];return p?[['MVA (PHT)',(220/p).toFixed(1),'cm²']]:[];},
+interp:'Severe rheumatic MS: MVA ≤ 1.5 cm² (very severe ≤ 1.0) and PHT ≥ 150 ms. Mean gradient > 10 mmHg supports severe disease but depends on heart rate. PHT is unreliable right after valvotomy and with significant AI or abnormal LV compliance.'});
+
+P.push({id:'mr',name:'Mitral regurgitation',intro:'Vena contracta from zoomed color in PLAX, then dP/dt from the CW MR jet as a marker of LV contractility.',scene:{view:'plax',mode:'2d'},tp:'scan2d',steps:[
+S('p:C','In PLAX, press C.','',{mode:'color',colorJet:'mr'},'color'),
+S('p:touchpad','Drag the color box over the mitral valve and left atrium.','Use a Nyquist of about 50 to 70 cm/s for MR assessment.',{},null),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to the systolic frame with the widest jet neck.','',{},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Mitral Valve','Tap Mitral Valve.','',{},'mv'),
+S('t:MR Vena Con','Tap MR Vena Con.','',{ov:{k:'dist',s:1,what:'mrvc'}},'measuring'),
+S('p:touchpad','Place the first caliper on one edge of the narrowest jet neck.','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'dist',s:2,what:'mrvc'}},null),
+S('p:touchpad','Place the second caliper on the other edge.','',{ov:{k:'dist',s:3,what:'mrvc'}},null,['MR Vena Con','0.5','cm']),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live, then move to apical 4-chamber.','',{frozen:false,ov:null,view:'a4c'},'color'),
+S('p:D','Press D.','',{mode:'cw',dline:true,target:'mr',wave:'mr'},'doppler'),
+S('t:CW','Tap CW.','',{},'doppler'),
+S('p:touchpad','Align the CW line with the MR jet.','',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+S('t:Scale ▲','Tap Scale ▲. The scale must reach at least 300 cm/s below the baseline for dP/dt.','',{},'doppler'),
+S('t:Fast','Tap Fast sweep speed.','dP/dt is a short time interval, so a fast sweep improves accuracy.',{},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Mitral Valve','Tap Mitral Valve.','',{},'mv'),
+S('t:MV dP/dt','Tap MV dP/dt under MR. A dotted line appears at 100 cm/s.','',{ov:{k:'dpdt',s:1}},'measuring'),
+S('p:touchpad','Drag the first caliper onto the MR upstroke at 100 cm/s. A second line appears at 300 cm/s.','',{ov:{k:'dpdt',s:2}},null),
+S('p:touchpad','Drag the second caliper onto the upstroke at 300 cm/s.','dP/dt = 32 mmHg ÷ time between 1 and 3 m/s.',{ov:{k:'dpdt',s:3}},null,['MV dP/dt','1250','mmHg/s']),
+S('p:saveImg','Press Save image.','',{saved:true},null)
+],calc:()=>[],
+interp:'Vena contracta < 0.3 cm is mild and ≥ 0.7 cm is severe primary MR. Normal LV dP/dt is above about 1200 mmHg/s; below 1000 suggests reduced LV contractility. This example is moderate MR with preserved contractility.'});
+
+P.push({id:'tapse',name:'TAPSE',intro:'M Mode through the lateral tricuspid annulus in the RV-focused apical 4-chamber view.',scene:{view:'rvf',mode:'2d'},tp:'scan2d',steps:[
+S('p:M','Press M. The M-line appears on the 2D image.','',{mode:'m',dline:true,target:'tvann',wave:'tapse'},'mmode'),
+S('p:touchpad','Move the M-line through the lateral tricuspid annulus.','Line it up with the direction of annular motion. Anatomical M can correct the angle if needed.',{gateSet:true},null),
+S('p:M','Press M again to start the M Mode sweep.','',{scroll:true},'mmode'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'calcs'),
+S('t:Function','Tap Function.','',{},'func'),
+S('t:TAPSE','Tap TAPSE. A right-angled caliper pair appears.','',{ov:{k:'tapse',s:1}},'measuring'),
+S('p:touchpad','Put the first caliper at end diastole (lowest point of the annulus trace).','',{},null),
+S('p:select','Press SELECT.','',{ov:{k:'tapse',s:2}},null),
+S('p:touchpad','Put the second caliper at peak systole (highest point).','',{ov:{k:'tapse',s:3}},null,['TAPSE','2.1','cm']),
+S('p:saveImg','Press Save image.','',{saved:true},null)
+],calc:()=>[],
+interp:'TAPSE below 1.7 cm suggests RV systolic dysfunction (ASE). It is angle dependent and reflects only longitudinal function of the free wall base.'});
+
+P.push({id:'vexus',name:'VExUS',intro:'Grade venous congestion with the PX VExUS exam: IVC first, then hepatic, portal and intrarenal vein Doppler. The VExUS package records each pattern and reports the grade.',scene:{view:'a4c',mode:'2d'},tp:'scan2d',steps:[
+S('t:Transducer / Exam','Tap the transducer and exam tile.','VExUS is its own exam type on the C5-1, C10-3 and P5-1. It loads venous presets and the VExUS calculation package.',{},'exam'),
+Object.assign(S('t:C5-1|VExUS','Double tap VExUS on the C5-1 (curved array) card.','The C5-1 curvilinear is the usual VExUS probe. VExUS is also on the C10-3 and P5-1, and the P5-1 fits between ribs. Any of the three is accepted here.',{exam:'C5-1 VExUS'},'scan2d'),{altT:['P5-1|VExUS','C10-3|VExUS']}),
+S('t:+ More Controls','Tap + More Controls.','',{},'scan2d'),
+S('t:ECG','Tap ECG and turn on the ECG display.','The VExUS exam supports ECG display. With leads on, you can time the S and D waves to systole and diastole.',{},'scan2d'),
+S('p:freeze','In the subcostal IVC long axis view, press Freeze.','Measure about 2 cm from the right atrial junction, just past the hepatic vein inlet.',{frozen:true},null),
+S('p:gain','Turn the GAIN wheel to the frame with the largest IVC diameter.','',{},null),
+S('p:calcs','Press CALCS. The VExUS package opens.','',{},'vexus'),
+S('t:IVC Max D','Tap IVC Max D.','A distance caliper appears.',{},null),
+S('p:touchpad','Drag the first caliper to the inner edge of the near IVC wall.','',{},null),
+S('p:select','Press SELECT.','',{},null),
+S('p:touchpad','Drag the second caliper to the inner edge of the far wall, perpendicular to the IVC.','',{},null,['IVC Max D','2.4','cm']),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('t:Dilated','Under IVC, select Dilated.','VExUS starts with the IVC. Under 2 cm is grade 0 and you stop there. 2 cm or more means you go on and grade the veins.',{},null,['IVC','Dilated (≥ 2 cm)','']),
+S('p:freeze','Press Freeze to go live, then find the middle or right hepatic vein.','',{frozen:false},'scan2d'),
+S('p:C','Press C to see hepatic vein flow.','',{mode:'color'},'color'),
+S('t:Color Scale ▼','Tap Color Scale ▼ until the scale reads about 20 to 30 cm/s.','Hepatic and portal venous flow is slow. A low color scale fills the veins without missing flow. Raise it again if everything aliases.',{},'color'),
+S('p:touchpad','Drag the color box over the hepatic vein near the IVC.','',{},null),
+S('p:D','Press D.','Only PW is used for VExUS. CW is not part of this exam type.',{mode:'pw',dline:true,wave:'hv'},'doppler'),
+S('p:touchpad','Place the gate in the hepatic vein 1 to 2 cm from the IVC, as parallel to flow as you can.','',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','Flow toward the heart is away from the probe, so normal S and D waves sit below the baseline. Use the ECG to label them.',{scroll:true},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'vexus'),
+S('t:Hepatic vein ▾','Tap the Hepatic vein drop-down.','',{},'hvl'),
+Object.assign(S('t:S < D (mild)','Pick the pattern you see. Here S is smaller than D.','Normal: S larger than D. Mildly abnormal: S smaller than D. Severely abnormal: S reversed above the baseline.',{},'vexus',['Hepatic vein','S < D (mild)','']),{link:[['Hepatic vein waveforms: VExUS CVP + HV lab','https://www.pulmonarypocus.com/cvp-hv'],['All VExUS waveforms: VExUS lab','https://www.pulmonarypocus.com/vexus-lab']]}),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live.','',{frozen:false,wave:'pv'},'doppler'),
+S('p:update','Press UPDATE to put the focus on the D-line.','',{},null),
+S('p:touchpad','Move the gate into the main or right portal vein.','',{},null),
+S('p:update','Press UPDATE to return to the sweep.','',{},null),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'vexus'),
+S('t:Pulsatility Fraction','Tap Pulsatility Fraction.','It uses a velocity pair: peak first, then minimum.',{},null),
+S('p:touchpad','Drag the caliper to the maximum portal velocity.','',{},null),
+S('p:select','Press SELECT.','',{},null),
+S('p:touchpad','Drag the second caliper to the minimum velocity.','PF = (Vmax − Vmin) ÷ Vmax. Under 30% is normal, 30 to 49% is mild, 50% or more is severe.',{},null,['Pulsatility Fraction','55','%']),
+S('t:Portal vein ▾','Tap the Portal vein drop-down.','',{},'pvl'),
+Object.assign(S('t:PF ≥ 50% (severe)','Pick PF ≥ 50% (severe).','',{},'vexus',['Portal vein','PF ≥ 50% (severe)','']),{link:[['Portal vein waveforms: VExUS lab','https://www.pulmonarypocus.com/vexus-lab']]}),
+S('p:saveImg','Press Save image.','',{saved:true},null),
+S('p:freeze','Press Freeze to go live, then move to the right kidney (coronal flank view).','',{frozen:false,wave:'irv'},'doppler'),
+S('p:C','Press C to show the interlobar vessels.','',{mode:'color'},'color'),
+S('t:Color Scale ▼','Tap Color Scale ▼ to lower the color scale.','Renal venous flow is slow. A color scale around 15 to 20 cm/s fills the small vessels.',{},'color'),
+S('p:D','Press D.','',{mode:'pw',dline:true},'doppler'),
+S('p:touchpad','Place the gate over an interlobar artery and vein pair.','The artery shows above the baseline and the vein below. Grade the venous signal.',{gateSet:true},null),
+S('p:D','Press D again to start the sweep.','',{scroll:true},'doppler'),
+S('t:Scale ▼','Tap Scale ▼ so the slow venous signal fills the display.','Intrarenal venous velocities are low, often 10 to 30 cm/s.',{},'doppler'),
+S('p:freeze','Press Freeze.','',{frozen:true},null),
+S('p:calcs','Press CALCS.','',{},'vexus'),
+S('t:Intrarenal vein ▾','Tap the Intrarenal vein drop-down.','',{},'irl'),
+Object.assign(S('t:Biphasic (mild)','Pick discontinuous biphasic (mild).','Continuous flow is normal. Discontinuous biphasic (separate S and D) is mild. Discontinuous monophasic (D only) is severe.',{},'vexus',['Intrarenal vein','Biphasic (mild)','']),{link:[['Intrarenal vein waveforms: VExUS lab','https://www.pulmonarypocus.com/vexus-lab']]}),
+S('p:saveImg','Press Save image. The PX reports the VExUS grade.','',{saved:true},null)
+],calc:r=>{if(!r['IVC'])return [];if(String(r['IVC']).startsWith('Non'))return [['VExUS grade','0','']];const v=[r['Hepatic vein'],r['Portal vein'],r['Intrarenal vein']].filter(Boolean);if(v.length<3)return [];const sev=v.filter(x=>/severe/.test(x)).length;return [['VExUS grade',sev>=2?'3':sev===1?'2':'1',sev>=2?'(severe)':sev===1?'(moderate)':'(mild)']];},
+interp:'VExUS (Beaubien-Souligny 2020): IVC under 2 cm is grade 0. With a dilated IVC, grade 1 has only normal or mildly abnormal patterns, grade 2 has one severely abnormal pattern, and grade 3 has two or more. This patient is grade 2. Read it together with the clinical picture, and remember that tricuspid regurgitation, AF and some liver disease change the waveforms.'});
+
+const LINKS={"lvot": [["LVOT VTI and RVSP lab", "https://www.pulmonarypocus.com/new-page-1"], ["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"], ["Hemodynamic lab", "https://www.pulmonarypocus.com/hemodynamic-lab"]], "simpson": [["Hemodynamic lab", "https://www.pulmonarypocus.com/hemodynamic-lab"]], "dia": [["Diastology lab", "https://www.pulmonarypocus.com/diastology"], ["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"]], "tr": [["LVOT VTI and RVSP lab", "https://www.pulmonarypocus.com/new-page-1"], ["PA acceleration time lab", "https://www.pulmonarypocus.com/pa-acceleration-time"], ["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"]], "as": [["Aortic stenosis lab", "https://www.pulmonarypocus.com/aortic-stenosis"], ["LVOT obstruction lab", "https://www.pulmonarypocus.com/lvot-obstruction"]], "ai": [["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"]], "ms": [["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"]], "mr": [["Color and Spectral Doppler lab", "https://www.pulmonarypocus.com/color-spectral-doppler"]], "vexus": [["VExUS lab (hepatic, portal and intrarenal waveforms)", "https://www.pulmonarypocus.com/vexus-lab"], ["VExUS CVP + HV lab (hepatic vein and CVP)", "https://www.pulmonarypocus.com/cvp-hv"], ["VExUS basics", "https://www.pulmonarypocus.com/vexus"]]};
+/* ---------------- phases ---------------- */
+const PH={setup:{0:'End the last study',2:'Start a new patient',5:'Choose the exam'},
+ lvot:{0:'Zoom on the LVOT in PLAX',3:'Measure the LVOT diameter',12:'Get PW Doppler in the LVOT (A5C)',19:'Trace the LVOT VTI',27:'Measure heart rate and save'},
+ dia:{0:'PW at the mitral leaflet tips',5:'Measure E, A and deceleration time',17:"Septal e' with TDI",27:"Lateral e' with TDI"},
+ tr:{0:'Find the TR jet with color',2:'Line up CW through the jet',7:'Measure TR VMax and add RAP'},
+ as:{0:'Measure the LVOT diameter (PLAX)',9:'PW in the LVOT (A5C)',14:'Trace the LVOT VTI',23:'CW through the aortic valve',29:'Trace the AV VTI'},
+ ai:{0:'Vena contracta with color (PLAX)',11:'CW of the AI jet (A5C)',17:'Measure the pressure half time'},
+ ms:{0:'Planimetry in PSAX',9:'CW through the mitral valve',14:'Measure the pressure half time',21:'Trace MV VTI for the mean gradient'},
+ mr:{0:'Vena contracta with color (PLAX)',11:'CW of the MR jet',18:'Measure dP/dt'},
+ tapse:{0:'Place the M-line',3:'Measure TAPSE'},
+ simpson:{0:'A4C end diastole',10:'A4C end systole',17:'A2C end diastole',28:'A2C end systole'},
+ vexus:{0:'Choose the VExUS exam',4:'IVC',13:'Hepatic vein',25:'Portal vein',38:'Intrarenal vein'}};
+P.forEach(p=>{let ph='';const m=PH[p.id]||{};p.steps.forEach((s,i)=>{if(m[i])ph=m[i];s.ph=ph;});p.phases=[...new Set(p.steps.map(s=>s.ph))];});
+
+/* ---------------- state ---------------- */
+let cur=P[1],si=0,scene={},report={},hist=[],errs=0,ctl={};
+const BASE={view:'a4c',mode:'2d',dline:false,scroll:false,frozen:false,zoom:false,zoomBox:false,target:null,wave:null,colorJet:null,ov:null,gateSet:false,exam:'P5-1 Cardiac'};
+const CTL0={scaleMul:null,base:null,sweep:'Med',gate:2,invert:false,depth:16,gain:50,cscale:69,cbase:0,cflow:'Med',opt:'Gen',thi:true,hprf:false,wall:'Med',more:false};
+let tpKey='scan2d',anim=null,frozenT=0,lastPkg=null,expPage='scan2d',lastWave=null;
+const PKG={'VExUS':'vexus','LV Function/EF':'lvf','Aortic Valve':'av','Diastology':'dia','Mitral Valve':'mv','Tricuspid/Pulmonic':'tp','Function':'func'};
+const CAT=k=>['start','endq','pform','exam'].includes(k)?'Patient':['scan2d','zoom','color','doppler','mmode'].includes(k)?'Scan':k==='report'?'Report':'Calcs';
+const scanKey=()=>scene.zoomBox?'zoom':{color:'color',pw:'doppler',cw:'doppler',tdi:'doppler',m:'mmode'}[scene.mode]||'scan2d';
+
+function loadProto(p,quiet){cur=p;si=0;scene=Object.assign({},BASE,p.scene);ctl=Object.assign({},CTL0);tpKey=p.tp;expPage=tpKey;lastPkg=null;lastWave=null;report={};hist=[];errs=0;
+  document.querySelectorAll('#protos button').forEach(b=>b.classList.toggle('on',b.dataset.id===p.id));
+  $('ptitle').textContent=p.name;$('doneBox').innerHTML='';$('fb').textContent='';if(!quiet)renderAll();}
+function renderAll(){renderReport();renderTouch();renderStep();renderList();}
+function snapshot(){return JSON.parse(JSON.stringify({si,lastPkg,scene,tpKey,report,ctl,expPage}));}
+function syncWave(){if(scene.wave!==lastWave){lastWave=scene.wave;const w=WV[scene.wave];if(w){ctl.scaleMul=w.mul0||1;ctl.base=w.base0!=null?w.base0:w.base;}}}
+
+function where(t){
+  if(t.startsWith('p:'))return 'on the control panel';
+  if(t==='t:END STUDY')return 'in the top bar of the touch panel';
+  return 'on the touch panel'+((TP[expPage]&&TP[expPage].crumb)?' ('+xc(TP[expPage].crumb)+')':'');
+}
+const lk=(arr,lead)=>arr&&arr.length?'<div class="wlinks"><div class="wl">'+lead+'</div>'+arr.map(a=>'<a href="'+a[1]+'" target="_blank" rel="noopener">'+a[0]+' ↗</a>').join('')+'</div>':'';
+function renderLinks(){const a=LINKS[cur.id];const s=cur.steps[si];const extra=s&&!s.link&&!(cur.steps[si-1]||{}).link?[]:[];$('labLinks').innerHTML=si>=cur.steps.length?'':lk(a,'What the Doppler should look like. Practice in the Doppler Lab:');}
+function renderStep(){renderLinks();
+  {const a=LINKS[cur.id];$('startRev').innerHTML=(si===0&&a&&a.length)?'<div class="srev"><span>Before you start, review what the Doppler should look like.</span><a class="btn primary" href="'+a[0][1]+'" target="_blank" rel="noopener">Review Doppler ↗</a></div>':'';}
+  const n=cur.steps.length;
+  if(si>=n){$('stepn').textContent='Complete';$('phase').textContent='All parts done';$('barI').style.width='100%';$('pressTag').innerHTML='';$('say').textContent='Done. '+cur.name+' measurements are saved to the report.';$('why').textContent=cur.intro;
+    const nx=P[P.indexOf(cur)+1];$('doneBox').innerHTML='<div class="done"><b>Nice work.</b> '+(cur.interp||'')+'</div>'+lk(LINKS[cur.id],'This is what the Doppler should look like. Practice the waveforms in the Doppler Lab:')+(nx?'<div class="acts"><button class="btn primary" id="nextP">Next: '+nx.name+'</button></div>':'');
+    if(nx)$('nextP').onclick=()=>loadProto(nx);$('nextB').textContent=nx?'Next lesson ›':'Done';highlight(null);renderBanner();return;}
+  $('nextB').textContent='Next ›';
+  const s=cur.steps[si];const prev=cur.steps[si-1];const L2=s.link||(prev&&prev.link);$('doneBox').innerHTML=L2?lk(L2,'This is what the Doppler should look like:'):'';
+  const pi=cur.phases.indexOf(s.ph);
+  $('phase').textContent='Part '+(pi+1)+' of '+cur.phases.length+' · '+s.ph;
+  $('stepn').textContent='Step '+(si+1)+' of '+n;$('barI').style.width=(si/n*100)+'%';
+  const lab=s.t.startsWith('p:')?PHYS[s.t.slice(2)]:s.t.slice(2).replace('|',' ');
+  $('pressTag').innerHTML='<span class="press">'+(s.t.startsWith('p:')?'Press':'Tap')+' '+lab+'</span><span class="where">'+where(s.t)+'</span>';
+  $('say').textContent=s.say;$('why').textContent=si===0&&!s.why?cur.intro:(s.why||'');
+  highlight($('guide').checked?s.t:null);renderBanner();
+}
+function renderList(){
+  let h='',ph=null;cur.steps.forEach((s,i)=>{if(s.ph!==ph){if(ph!==null)h+='</ol>';ph=s.ph;h+='<div class="lph">'+(cur.phases.indexOf(ph)+1)+'. '+ph+'</div><ol>';}
+    const lab=s.t.startsWith('p:')?PHYS[s.t.slice(2)]:s.t.slice(2).replace('|',' ');
+    h+='<li class="'+(i<si?'dn':i===si?'now':'')+'" data-i="'+i+'"><span class="k">'+lab+'</span><span class="d">'+s.say+'</span></li>';});
+  h+='</ol>';$('stepList').innerHTML=h;
+  $('stepList').querySelectorAll('li').forEach(li=>li.onclick=()=>jumpTo(+li.dataset.i));
+  const now=$('stepList').querySelector('li.now');if(now&&$('stepsBox').open){const box=$('stepList');box.scrollTop=Math.max(0,now.offsetTop-box.offsetTop-60);}
+}
+function jumpTo(i){loadProto(cur,true);for(let k=0;k<i;k++)advance(cur.steps[k],true);$('fb').className='fb';$('fb').textContent='Jumped to step '+(i+1)+'.';renderAll();}
+function highlight(t){
+  document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));document.querySelectorAll('.hlk').forEach(e=>e.classList.remove('hlk'));
+  if(!t)return;
+  if(t.startsWith('p:')){const g=document.querySelector('#panel [data-k="'+t.slice(2)+'"]');if(g){g.classList.add('hlk');const ph=document.querySelector('.phys');if(ph.scrollWidth>ph.clientWidth){const gr=g.getBoundingClientRect(),pr=ph.getBoundingClientRect();if(gr.left<pr.left+8||gr.right>pr.right-8)ph.scrollTo({left:ph.scrollLeft+gr.left-pr.left-pr.width/2+gr.width/2,behavior:'smooth'});}}}
+  else{const b=[...document.querySelectorAll('.tbtn')].find(x=>x.dataset.l===t.slice(2));if(b)b.classList.add('hl');}
+}
+function renderBanner(){
+  const s=cur.steps[si];const bn=$('tbanner');if(!bn)return;
+  if(!s||!s.t.startsWith('t:')||s.t==='t:END STUDY'){bn.innerHTML='';return;}
+  const here=[...document.querySelectorAll('#tpanel .tbtn')].some(x=>x.dataset.l===s.t.slice(2));
+  if(here){bn.innerHTML='';return;}
+  bn.innerHTML='<div class="banner"><span>The next button, <b>'+s.t.slice(2)+'</b>, is on <b>'+(TP[expPage]?TP[expPage].crumb:'another page')+'</b>.</span><button class="btn primary" id="goThere">Go there</button></div>';
+  $('goThere').onclick=()=>{tpKey=expPage;ctl.pf=null;renderTouch();renderStep();};
+}
+/* group header live values */
+function hv(h){
+  const w=WV[scene.wave];const vs=w?w.scale*(ctl.scaleMul||1):0;const b=ctl.base!=null?ctl.base:(w?w.base:0.5);
+  const fmt=v=>vs>200?(v/100).toFixed(1)+' m/s':Math.round(v)+' cm/s';
+  if(h==='Doppler Scale'&&w)return h+' <em>+'+fmt(vs*b)+' / −'+fmt(vs*(1-b))+'</em>';
+  if(h==='Gate')return h+' <em>'+ctl.gate+' mm</em>';
+  if(h==='Color Scale')return h+' <em>±'+ctl.cscale+' cm/s</em>';
+  if(h==='Color Baseline')return h+' <em>'+(ctl.cbase>0?'+':'')+ctl.cbase+'</em>';
+  return h;
+}
+const DISP={'DF 1/3':'1/3 2D · 2/3','DF 1/2':'1/2 · 1/2','DF 2/3':'2/3 2D · 1/3','DF SxS':'Side by side','Steer L':'Left','Steer C':'Center','Steer R':'Right'};
+const CSV=[10,15,20,25,30,40,50,60,69,80,100,120,150];
+const TOG=['Procedure Mode','Sector','Centerline','THI','Invert','Show/Hide Color','Anatomical M','Simultaneous','Color Compare','HPRF','Voice Assist'];
+function isSel(b){
+  if(['PW','CW','TDI'].includes(b))return scene.mode===b.toLowerCase();
+  if(b==='Color')return scene.mode==='color';
+  if(b==='Var')return false;
+  if(['Slow','Fast'].includes(b))return ctl.sweep===b;
+  if(b==='Med')return tpKey==='color'?ctl.cflow==='Med':ctl.sweep==='Med';
+  if(['High','Low'].includes(b))return ctl.cflow===b;
+  if(b.startsWith('WF '))return ctl.wall===b.slice(3);
+  if(b.startsWith('DF '))return (ctl.df||'DF 1/3')===b;
+  if(b.startsWith('Steer '))return (ctl.steer||'Steer C')===b;
+  if(b.startsWith('port:'))return (scene.exam||'').split(' ')[0]===b.slice(5);
+  if(['Res','Gen','Pen'].includes(b))return ctl.opt===b;
+  if(TOG.includes(b))return !!(ctl.tg||{})[b];
+  if(b==='Zoom')return scene.zoomBox||scene.zoom;
+  return false;
+}
+const esc=t=>String(t).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const ICON={Zoom:'<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5M7 10h6M10 7v6" stroke="currentColor" stroke-width="2"/></svg>',Unzoom:'<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="10" cy="10" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15 15l5 5M7 10h6" stroke="currentColor" stroke-width="2"/></svg>',Print:'<svg viewBox="0 0 24 24" width="22" height="22"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>'};
+const F0=()=>({P:2.0,C:2.5,L:5.0,T:3.5}[(scene.exam||'P')[0]]||2.0);
+const PRF=vNyqCms=>(4*F0()*1e6*(vNyqCms/100)/1540/1000).toFixed(1);
+function tval(h,t){
+  t=t||{};
+  const w=WV[scene.wave];const vs=w?w.scale*(ctl.scaleMul||1):0;const b=ctl.base!=null?ctl.base:(w?w.base:0.5);
+  const fmt=v=>vs>200?(v/100).toFixed(1):Math.round(v);
+  if(t.v==='dop')return w?('+'+fmt(vs*b)+' / −'+fmt(vs*(1-b))+(vs>200?' m/s':' cm/s')+'<br><span class="prf">PRF '+(scene.mode==='cw'?'CW':PRF(vs/2)+' kHz')+'</span>'):'—';
+  if(t.v==='dopb')return w?(b<0.45?'Up '+Math.round((0.5-b)*10):b>0.55?'Down '+Math.round((b-0.5)*10):'Center'):'Center';
+  if(t.v==='gate')return ctl.gate+' mm';
+  if(h==='Color Scale')return '±'+ctl.cscale;
+  if(h==='Color Baseline')return (ctl.cbase>0?'+':'')+ctl.cbase;
+  if(h==='Dynamic Range')return ctl.dr||0;
+  if(h==='Power')return (ctl.pwr??0)+' dB';
+  if(h==='Volume')return ctl.vol??5;
+  if(h==='Focus')return ctl.focus??8;
+  if(h==='Auto Gain Adjust')return ctl.ag??0;
+  return '';
+}
+function cbar(){const f=0.5-ctl.cbase*0.1,top=Math.round(ctl.cscale*2*f),bot=Math.round(ctl.cscale*2*(1-f));
+  return '<div class="cbar"><span class="cv">+'+top+'</span><span class="cb2" style="--z:'+(f*100)+'%"><i></i></span><span class="cv">−'+bot+'</span><span class="cu">cm/s</span><span class="prf">PRF '+PRF(ctl.cscale)+' kHz</span></div>';}
+const PORTS=['P5-1','C5-1','L15-4'];
+function probeIcon(p,w){const c=p[0];const face=c==='C'?'<path d="M30 3 Q60 12 30 21" fill="none" stroke="currentColor" stroke-width="1.8"/>':c==='L'?'<rect x="30" y="1" width="22" height="22" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>':c==='T'?'<circle cx="38" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M44 12h12" stroke="currentColor" stroke-width="1.8"/>':'<rect x="30" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>';
+  return '<svg viewBox="0 0 60 24" width="'+(w||64)+'" height="'+Math.round((w||64)*26/64)+'"><path d="M4 8h10l6-4h8v16h-8l-6-4H4z" fill="none" stroke="currentColor" stroke-width="1.8"/>'+face+'</svg>';}
+function tileHTML(t){
+  const B=(l,txt,cls)=>'<button class="tbtn '+(cls||'')+(isSel(l)?' sel':'')+'" data-l="'+esc(l)+'">'+txt+'</button>';
+  let inner='';
+  if(t.k==='toggle'){const on=isSel(t.h);inner='<button class="tbtn tog'+(on?' sel':'')+'" data-l="'+esc(t.h)+'"><span class="sw"><i></i></span>'+(on?'ON':'OFF')+'</button>';}
+  else if(t.k==='seg')inner='<div class="sg">'+t.b.map(l=>B(l,DISP[l]||l.replace(/^WF /,''),'sgb')).join('')+'</div>'+(t.h==='Steer'&&(scene.exam||'P')[0]!=='L'?'<div class="tnote">Linear transducers only</div>':'');
+  else if(t.k==='arrows'&&(t.v==='col'||t.v==='colb'))inner='<div class="ar"><div class="arb">'+B(t.b[0],'<svg viewBox="0 0 20 12" width="16" height="10"><path d="M3 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>','arw')+B(t.b[1],'<svg viewBox="0 0 20 12" width="16" height="10"><path d="M3 2l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>','arw')+'</div>'+cbar()+'</div>';
+  else if(t.k==='arrows')inner='<div class="ar"><div class="arb">'+B(t.b[0],'<svg viewBox="0 0 20 12" width="16" height="10"><path d="M3 10l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2"/></svg>','arw')+B(t.b[1],'<svg viewBox="0 0 20 12" width="16" height="10"><path d="M3 2l7 7 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>','arw')+'</div><span class="val">'+tval(t.h,t)+'</span></div>'+(t.chk?'<button class="tbtn chk'+(isSel(t.chk)?' sel':'')+'" data-l="'+t.chk+'"><span class="cb"></span>'+t.chk+'</button>':'');
+  else if(t.k==='icon')inner=B(t.b[0],ICON[t.b[0]]||t.b[0],'ico');
+  else if(t.k==='fields')inner='<div class="fl">'+t.b.map(l=>'<button class="tbtn fld" data-l="'+esc(l)+'"><span>'+l+'</span><em>'+(fieldVal(l))+'</em></button>').join('')+'</div>';
+  else inner='<div class="bl">'+t.b.map(l=>B(l,l.includes('|')?l.split('|')[1]:l,'txt')).join('')+'</div>';
+  return '<div class="tile k-'+t.k+'"><div class="th"><span>'+t.h+'</span><i>i</i></div>'+inner+'</div>';
+}
+function fieldVal(l){if(l==='Height')return report.__h?'178 cm':'';if(l==='Weight')return report.__w?'80 kg':'';if(l==='BSA (auto)')return report['BSA']?'1.9 m²':'';return '';}
+const xc=c=>String(c).replace('P5-1 Cardiac',scene.exam||'P5-1 Cardiac');
+function renderTouch(){
+  if(tpKey==='scan')tpKey=scanKey();
+  const pg=TP[tpKey]||{crumb:'Calcs › '+tpKey.replace(/^gen:/,''),g:[{h:'Not used in this lesson',b:['‹ Packages']}]};
+  const ex=(scene.exam||'P5-1 Cardiac').split(' ');
+  const left='<div class="lcol"><button class="tbtn big green" data-l="+ New Patient"><svg viewBox="0 0 32 32" width="30" height="30"><circle cx="13" cy="12" r="6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 28c1-6 6-9 10-9s9 3 10 9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="24" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M24 6v6M21 9h6" stroke="currentColor" stroke-width="2"/></svg>+ New Patient</button>'+
+    '<div class="ttc"><div class="ttch">Transducers</div><div class="ports">'+PORTS.map(p=>'<button class="tbtn port'+(isSel('port:'+p)?' sel':'')+'" data-l="port:'+p+'">'+probeIcon(p,30)+'<span>'+p+'</span></button>').join('')+'</div><button class="tbtn exr2" data-l="Transducer / Exam"><b>'+ex[0]+'</b> '+ex.slice(1).join(' ')+' <i>›</i></button></div>'+
+    '<button class="tbtn big dim" data-l="Report & Worksheet"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M6 3h9l4 4v14H6z M9 11h7M9 15h7" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Report &amp; Worksheet</button></div>';
+  const right='<div class="rcol"><button class="tbtn big purple" data-l="Learn"><svg viewBox="0 0 32 32" width="30" height="30"><path d="M2 12l14-6 14 6-14 6z M8 15v6c4 4 12 4 16 0v-6" fill="none" stroke="currentColor" stroke-width="2"/></svg>Learn</button><button class="tbtn big dim" data-l="Patient List"><svg viewBox="0 0 32 32" width="28" height="28"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 27c1-5 5-8 9-8s8 3 9 8" fill="none" stroke="currentColor" stroke-width="2"/><rect x="19" y="5" width="10" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="2"/></svg>Patient List</button><button class="tbtn big dim" data-l="Help"><span class="hi">i</span>Help</button></div>';
+  const vtog=(ctl.tg||{})['Voice Assist'];
+  const top='<div class="ttop"><button class="tbtn clean" data-l="Enter Cleaning Mode">Enter Cleaning Mode</button><button class="tbtn va'+(vtog?' sel':'')+'" data-l="Voice Assist"><span class="mic">🎙</span> Voice Assist <span class="sw"><i></i></span>'+(vtog?'ON':'OFF')+'</button><span class="sp"></span><span class="stat" title="Network and battery"><svg viewBox="0 0 24 18" width="18" height="14"><path d="M2 6c6-5 14-5 20 0M5 9.5c4-3.3 10-3.3 14 0M8.5 13c2-1.6 5-1.6 7 0" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="16" r="1.6" fill="currentColor"/></svg><span>DICOM ✓</span><svg viewBox="0 0 30 14" width="26" height="12"><rect x="1" y="1" width="25" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="20" height="8" fill="#4ade80"/><rect x="27" y="4.5" width="2" height="5" fill="currentColor"/></svg><span>98%</span></span><button class="tbtn endst" data-l="END STUDY">END STUDY</button><button class="tbtn hamb" data-l="Menu">☰</button></div>';
+  let center='';
+  if(pg.full){
+    center='<div class="hello"><div class="hq">Hello, where would you like to start?</div><div class="hg">'+
+      [['Scan','cyan','Using default transducer and exam type'],['Enter','lime','Patient information'],['Select','gray','Transducer and exam type'],['Learn','violet','How to perfect your technique']].map(x=>'<button class="tbtn hcard '+x[1]+'" data-l="'+x[0]+'"><b>'+x[0]+'</b><span>'+x[2]+'</span></button>').join('')+'</div></div>';
+    $('tpanel').innerHTML=top+center;
+  } else {
+    const cat=CAT(tpKey);
+    let head='';
+    if(cat==='Scan'){const mt={color:'Color',pw:'Doppler',cw:'Doppler',tdi:'Doppler',m:'M Mode'}[scene.mode];
+      head='<div class="tabs"><button class="tbtn tab'+(tpKey==='scan2d'||tpKey==='zoom'?' on':'')+'" data-l="tab:2D">2D</button>'+(mt?'<button class="tbtn tab'+(tpKey!=='scan2d'&&tpKey!=='zoom'?' on':'')+'" data-l="tab:mode">'+mt+'</button>':'')+'</div>';}
+    else head='<div class="chead">'+(cat==='Calcs'&&tpKey!=='calcs'?'<button class="tbtn bk" data-l="‹ Packages">‹ Packages</button>':'')+'<span class="ct">'+(tpKey==='report'?'Report & Worksheet':xc(pg.crumb))+'</span>'+(cat==='Calcs'||tpKey==='report'?'<button class="tbtn bk x" data-l="Close">Close ✕</button>':'')+'</div>';
+    const card=/Cardiac/.test(scene.exam||'');let tiles0=(pg.tiles?pg.tiles.slice():(pg.g||[]).map(g=>T(g.h,'btns',g.b))).map(t=>t.h==='Color Type'&&!card?T('Color Type','seg',['Color','CPD']):t.h==='Doppler Mode'&&!card?T('Doppler Mode','seg',['PW']):t);
+    let tiles=tpKey==='exam'?tiles0.filter(t=>ctl.pf?t.h.startsWith(ctl.pf+' '):PORTS.some(p=>t.h.startsWith(p+' '))):tiles0;
+    if(tpKey==='exam'&&ctl.pf)tiles=tiles.concat([T('Other transducers','btns',['All transducers'])]);
+    if(tpKey==='report'){const rows=Object.values(report).filter(r=>r[0][0]!=='_');tiles=[];center='<div class="rep2">'+(rows.length?rows.map(r=>'<div class="rrow"><span>'+r[0]+'</span><b>'+r[1]+' '+r[2]+'</b></div>').join(''):'<div class="rrow"><span>Nothing saved yet. Measurements saved with the camera button appear here.</span></div>')+'</div>';}
+    if(pg.more&&ctl.more)tiles=tiles.concat(pg.more);
+    let body=center||((pg.note?'<div class="pnote">'+pg.note+'</div>':'')+'<div class="tgrid">'+tiles.map(tileHTML).join('')+'</div>');
+    if(pg.more)body+='<div class="morer"><button class="tbtn more" data-l="'+(ctl.more?'- Less Controls':'+ More Controls')+'">'+(ctl.more?'− Less Controls':'+ More Controls')+'</button></div>';
+    if(pg.dialog)body='<div class="dlg"><div class="dq">End the current study?</div><div class="dd">Images and measurements are saved to this patient. A new study starts on the startup screen.</div><div class="db"><button class="tbtn txt" data-l="Cancel">Cancel</button><button class="tbtn txt pri" data-l="Yes">Yes</button></div></div>';
+    $('tpanel').innerHTML=top+'<div class="tbody">'+left+'<div class="tcenter" id="tcenter">'+head+'<div id="tbanner"></div>'+body+'</div>'+right+'</div>';
+  }
+  $('crumb').textContent=xc(pg.crumb);
+  document.querySelectorAll('#tpanel .tbtn').forEach(b=>b.onclick=()=>touch(b.dataset.l,b));
+  if(si<cur.steps.length&&$('guide').checked)highlight(cur.steps[si].t);
+  renderBanner();
+}
+function info(t){$('fb').className='fb info';$('fb').textContent=t;}
+/* adjustments that always work */
+function adjust(l){
+  syncWave();ctl.tg=ctl.tg||{};
+  const ar=(k,d,lo,hi,def)=>{ctl[k]=clamp((ctl[k]??def)+d,lo,hi);};
+  const m={
+   'Scale ▲':()=>{ctl.scaleMul=clamp((ctl.scaleMul||1)*1.25,0.3,2.5);},'Scale ▼':()=>{ctl.scaleMul=clamp((ctl.scaleMul||1)/1.25,0.3,2.5);},
+   'Baseline ▲':()=>{ctl.base=clamp((ctl.base??0.5)-0.15,0.08,0.92);},'Baseline ▼':()=>{ctl.base=clamp((ctl.base??0.5)+0.15,0.08,0.92);},
+   'Gate ▲':()=>ar('gate',1,1,12,2),'Gate ▼':()=>ar('gate',-1,1,12,2),
+   'Slow':()=>{ctl.sweep='Slow';},'Med':()=>{if(tpKey==='color')ctl.cflow='Med';else ctl.sweep='Med';},'Fast':()=>{ctl.sweep='Fast';},
+   'High':()=>{ctl.cflow='High';},'Low':()=>{ctl.cflow='Low';},
+   'WF Low':()=>{ctl.wall='Low';},'WF Med':()=>{ctl.wall='Med';},'WF High':()=>{ctl.wall='High';},
+   'Res':()=>{ctl.opt='Res';},'Gen':()=>{ctl.opt='Gen';},'Pen':()=>{ctl.opt='Pen';},
+   'Color Scale ▲':()=>{const i=CSV.findIndex(v=>v>ctl.cscale);if(i>=0)ctl.cscale=CSV[i];},'Color Scale ▼':()=>{const a=CSV.filter(v=>v<ctl.cscale);if(a.length)ctl.cscale=a[a.length-1];},
+   'Color Baseline ▲':()=>{ctl.cbase=Math.min(4,ctl.cbase+1);},'Color Baseline ▼':()=>{ctl.cbase=Math.max(-4,ctl.cbase-1);},
+   'DR ▲':()=>ar('dr',1,-6,6,0),'DR ▼':()=>ar('dr',-1,-6,6,0),'Power ▲':()=>ar('pwr',1,-10,0,0),'Power ▼':()=>ar('pwr',-1,-10,0,0),
+   'Volume ▲':()=>ar('vol',1,0,10,5),'Volume ▼':()=>ar('vol',-1,0,10,5),'Focus ▲':()=>ar('focus',-1,2,18,8),'Focus ▼':()=>ar('focus',1,2,18,8),'AG ▲':()=>ar('ag',1,-5,5,0),'AG ▼':()=>ar('ag',-1,-5,5,0),
+   'DF 1/3':()=>{ctl.df='DF 1/3';},'DF 1/2':()=>{ctl.df='DF 1/2';},'DF 2/3':()=>{ctl.df='DF 2/3';},'DF SxS':()=>{ctl.df='DF SxS';},
+   '+ More Controls':()=>{ctl.more=true;},'- Less Controls':()=>{ctl.more=false;}
+  };
+  if(l.startsWith('Steer ')){if((scene.exam||'P')[0]!=='L'){ctl._steerMsg=1;return true;}ctl.steer=l;return true;}
+  if(TOG.includes(l)&&l!=='Invert'){ctl.tg[l]=!ctl.tg[l];return true;}
+  if(l==='Invert'){ctl.tg.Invert=!ctl.tg.Invert;ctl.invert=ctl.tg.Invert;return true;}
+  if(m[l]){m[l]();return true;}return false;
+}
+const ADJ_NOTE={'DF 1/3':'Display Format: 2D image on the top third, sweep on the bottom two thirds.','DF 1/2':'Display Format: half 2D, half sweep.','DF 2/3':'Display Format: 2D on the top two thirds, sweep on the bottom third.','DF SxS':'Display Format: 2D and sweep side by side.','Steer L':'Steered left.','Steer C':'Steer centered.','Steer R':'Steered right.','WF Low':'Low wall filter: keeps slow flow (venous, TDI).','WF High':'High wall filter: removes more low-velocity noise near the baseline (valve clicks, wall motion).','WF Med':'Medium wall filter.','Scale ▲':'Doppler Scale up: more velocity range, less aliasing.','Scale ▼':'Doppler Scale down: smaller range. PW aliases sooner.','Baseline ▲':'Baseline moved up: more room below it for flow away from the probe.','Baseline ▼':'Baseline moved down: more room above it for flow toward the probe.','Invert':'Invert flips the spectral display above and below the baseline.','Slow':'Slow sweep shows more beats.','Fast':'Fast sweep spreads each beat out for timing measurements.','Med':'Medium speed.','Gate ▲':'Bigger gate: more signal but more spectral broadening.','Gate ▼':'Smaller gate: cleaner envelope from one spot.','HPRF':'HPRF lets PW reach higher velocities using extra gates, at the cost of range ambiguity.','THI':'Tissue harmonic imaging improves contrast and cuts clutter.','Res':'Res: best resolution for shallow targets.','Gen':'Gen: balances resolution and penetration.','Pen':'Pen: best penetration for deep or difficult windows.','Sector':'Sector width control. Press SELECT to switch between width and steering.','Procedure Mode':'Procedure Mode stops sleep and auto power off during a procedure.','Centerline':'Shows a center guide line on the image.','+ More Controls':'More controls are open. Press and hold a tile to move it in a custom exam type.','- Less Controls':'Fewer controls shown.','Voice Assist':'Voice Assist needs the Sonosite microphone in a USB port.','Simultaneous':'Simultaneous keeps the 2D image live while PW scrolls.','Anatomical M':'Anatomical M lets you set the M-line at any angle. Press SELECT to switch between position and angle.'};
+const INFO_ONLY={'Learn':'Learn opens Sonosite training videos on the system.','Patient List':'Patient List shows saved studies.','Help':'Help opens the user guide on the system.','Enter Cleaning Mode':'Cleaning Mode locks the controls so you can wipe the touch screen.','Menu':'The menu holds settings, administration and log off.','Print':'Print sends the screen to a connected printer.','ECG':'ECG settings (lead display, gain).','Angle Correct':'Angle Correct adjusts the flow angle from -60° to 60°. Leave it at 0° for cardiac Doppler.','Display Format':'Display Format sets how much of the screen shows the 2D image versus the sweep.','Auto Trace':'Auto Trace settings: trace peak or mean, above or below the baseline.','Unzoom':'Unzoom returns to the full image.','Scan':'Scan starts imaging with the selected exam.','Select':'Select opens the transducer and exam types.','Cancel':'Cancelled.','Report & Worksheet':null,'Color':'Color velocity Doppler is on.','Var':'Variance shows turbulent flow in green (cardiac exams only).','CPD':'Color Power Doppler shows flow presence with more sensitivity but no direction or velocity.','L':'Dual: left image active.','R':'Dual: right image active.'};
+function touch(l,el){
+  const s=cur.steps[si];
+  if(s&&(('t:'+l)===s.t||(s.altT||[]).includes(l)||(s.t==='t:Enter'&&l==='+ New Patient'))){adjust(l);if(PKG[l])lastPkg=PKG[l];advance(s);if(l.includes('|')){scene.exam=l.replace('|',' ');if(!/Cardiac/.test(scene.exam))ctl.cscale=40;renderTouch();renderStep();}return;}
+  if(l==='tab:2D'){tpKey=scene.zoomBox?'zoom':'scan2d';renderTouch();renderStep();info('2D controls.');return;}
+  if(l==='tab:mode'){tpKey={color:'color',pw:'doppler',cw:'doppler',tdi:'doppler',m:'mmode'}[scene.mode]||'scan2d';renderTouch();renderStep();return;}
+  if(l.startsWith('port:')){ctl.pf=l.slice(5);tpKey='exam';renderTouch();renderStep();info(ctl.pf+' selected. Double tap an exam type for this transducer.');return;}
+  if(l==='All transducers'){ctl.pf=null;renderTouch();return;}
+  if(l==='‹ Packages'){tpKey='calcs';renderTouch();renderStep();return;}
+  if(l==='Close'){tpKey=scanKey();renderTouch();renderStep();return;}
+  if(l==='Report & Worksheet'){tpKey='report';renderTouch();renderStep();info('Report & Worksheet shows everything saved for this patient.');return;}
+  if(l==='END STUDY'){info('END STUDY closes this patient. Use it only when you are starting a new patient.');return;}
+  if(adjust(l)){if(ctl._steerMsg){ctl._steerMsg=0;info('Steering is for linear transducers only. On the '+(scene.exam||'P5-1').split(' ')[0]+' it stays centered.');renderTouch();return;}info(ADJ_NOTE[l]||(l.replace(/^WF /,'Wall Filter ').replace(/^DR /,'Dynamic Range ')+' changed.'));renderTouch();return;}
+  if(PKG[l]){tpKey=PKG[l];lastPkg=tpKey;renderTouch();renderStep();info('Opened '+l+'.');return;}
+  if(TP.calcs.g.some(g=>g.b.includes(l))&&tpKey==='calcs'){tpKey='gen:'+l;renderTouch();renderStep();return;}
+  if(INFO_ONLY[l]){info(INFO_ONLY[l]);return;}
+  if(l.includes('|')){const pr=l.split('|');act('t:'+l,el);$('fb').textContent=pr[0]+' '+pr[1]+' is not the exam for this lesson. '+$('fb').textContent.replace(/^.*?not the next step\. /,'');return;}
+  act('t:'+l,el);
+}
+
+function alts(s){const a=[s.t];if((s.t==='p:D'||s.t==='p:M')&&s.set.scroll)a.push('p:update');return a;}
+function act(id,el){
+  if(si>=cur.steps.length){if(id.startsWith('p:'))physFree(id.slice(2));return;}
+  const s=cur.steps[si];
+  if(alts(s).includes(id)){if(id==='p:gain')physFree('gain',true);advance(s);return;}
+  if(id.startsWith('p:')&&physFree(id.slice(2)))return;
+  errs++;const want=(s.t.startsWith('p:')?PHYS[s.t.slice(2)]:'"'+s.t.slice(2)+'"')+' '+where(s.t);
+  $('fb').className='fb no';$('fb').textContent=(id.startsWith('p:')?PHYS[id.slice(2)]:id.slice(2))+' is not the next step. '+(errs>1?'Look for '+want+'.':'Try again.');
+  if(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}
+  if(errs>1)highlight(s.t);
+}
+/* physical controls that are safe to use any time */
+function physFree(k,quiet){
+  const say=t=>{if(!quiet)info(t);};
+  if(k==='depthUp'||k==='depthDn'){if(scene.frozen){say('Depth cannot change on a frozen image.');return true;}ctl.depth=clamp(ctl.depth+(k==='depthUp'?-2:2),8,24);say('Depth '+ctl.depth+' cm.');return true;}
+  if(k==='gain'){if(scene.frozen){frozenT-=CY/12;say('Scrolling the cine buffer.');}else{ctl.gain=ctl.gain>=80?30:ctl.gain+10;say('2D gain '+ctl.gain+'%.');}return true;}
+  if(k==='auto'){if(!scene.frozen)ctl.gain=50;say('AUTO set the gain profile.');return true;}
+  if(k==='tgc'){say('TGC shows the on-screen depth gain sliders (live imaging only).');return true;}
+  if(k==='abc'){say('ABC opens text labels. Not needed for this measurement.');return true;}
+  if(k==='caliper'){say('CALIPER gives quick measurements that stay on the image only. Use CALCS so values go to the report.');return true;}
+  if(['C','D','M','twoD'].includes(k)){
+    if(scene.frozen){say('Unfreeze first (press Freeze) to change imaging mode.');return true;}
+    const dop=['pw','cw','tdi'].includes(scene.mode);
+    if(k==='twoD'){scene.mode='2d';scene.scroll=false;scene.dline=false;scene.zoom=false;scene.zoomBox=false;say('2D only. The touch panel shows the 2D controls.');}
+    else if(k==='C'){if(scene.mode==='color'){scene.mode='2d';say('Color off. The touch panel is back to 2D controls.');}else{scene.mode='color';scene.scroll=false;say('Color on. The touch panel now shows Scale (PRF), Baseline, Invert, Steer and Wall Filter.');}}
+    else if(k==='D'){if(!dop){scene.mode='pw';scene.dline=true;scene.scroll=false;if(!scene.wave)scene.wave=/Cardiac/.test(scene.exam||'')?'lvot':'hv';say('Doppler on: the D-line appears. The touch panel shows Doppler Mode, Scale (PRF), Baseline, Sweep Speed, Wall Filter and Sample Volume. Press D again to start the sweep.');}else if(!scene.scroll){scene.scroll=true;say('Doppler sweep started.');}else{scene.mode='2d';scene.scroll=false;scene.dline=false;say('Doppler off.');}}
+    else if(k==='M'){if(scene.mode!=='m'){scene.mode='m';scene.dline=true;scene.scroll=false;say('M Mode on: the M-line appears. Press M again to start the sweep.');}else if(!scene.scroll){scene.scroll=true;say('M Mode sweep started.');}else{scene.mode='2d';scene.scroll=false;scene.dline=false;say('M Mode off.');}}
+    tpKey=scanKey();renderTouch();renderStep();const nx=cur.steps[si];if(nx&&!quiet)$('fb').textContent+=' Next step: '+(nx.t.startsWith('p:')?'press '+PHYS[nx.t.slice(2)]:'tap '+nx.t.slice(2))+'.';
+    return true;}
+  if(k==='saveClip'){say(scene.frozen?'Save clip works during live imaging.':'Clip saved.');return true;}
+  return false;
+}
+function advance(s,silent){
+  hist.push(snapshot());errs=0;ctl.pf=null;
+  Object.assign(scene,JSON.parse(JSON.stringify(s.set)));syncWave();if(s.set.exam&&!/Cardiac/.test(s.set.exam))ctl.cscale=40;
+  if(s.set.frozen===true)frozenT=tNow;
+  if(s.tp){tpKey=s.tp==='measuring'?(lastPkg||'calcs'):s.tp;if(Object.values(PKG).includes(tpKey))lastPkg=tpKey;}
+  else if(CAT(tpKey)==='Scan')tpKey=scanKey();
+  if(s.set.zoomBox===false&&tpKey==='zoom')tpKey='scan2d';
+  expPage=tpKey;
+  const adds=s.multi||(s.res?[s.res]:[]);adds.forEach(r=>report[r[0]]=r);
+  if(s.anim==='trace'&&!silent){anim={t0:performance.now(),dur:1100};}
+  si++;
+  if(silent)return;
+  const adds2=adds.filter(r=>r[0][0]!=='_');$('fb').className='fb ok';$('fb').textContent=adds2.length?'Measured: '+adds2.map(r=>r[0]+' '+r[1]+' '+r[2]).join(', '):'Correct.';
+  renderAll();
+}
+$('back').onclick=()=>{const h=hist.pop();if(!h)return;si=h.si;lastPkg=h.lastPkg;scene=h.scene;tpKey=h.tpKey;report=h.report;ctl=h.ctl;expPage=h.expPage;lastWave=scene.wave;$('fb').textContent='';renderAll();};
+$('restart').onclick=()=>loadProto(cur);
+let pending=false;
+function goNext(){
+  if(pending)return;
+  if(si>=cur.steps.length){const nx=P[P.indexOf(cur)+1];if(nx)loadProto(nx);return;}
+  const s=cur.steps[si];pending=true;
+  if(s.t.startsWith('t:')&&tpKey!==expPage){tpKey=expPage;renderTouch();}
+  highlight(s.t);
+  const el=s.t.startsWith('p:')?document.querySelector('#panel [data-k="'+s.t.slice(2)+'"]'):[...document.querySelectorAll('.tbtn')].find(x=>x.dataset.l===s.t.slice(2));
+  if(el){el.classList.add('press');if(!s.t.startsWith('p:'))el.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  setTimeout(()=>{if(el)el.classList.remove('press');pending=false;if(cur.steps[si]===s){s.t.startsWith('t:')?touch(s.t.slice(2)):act(s.t);}},650);
+}
+$('nextB').onclick=goNext;
+document.addEventListener('keydown',e=>{if(e.target.closest&&e.target.closest('input,textarea'))return;if(e.key==='ArrowRight'){e.preventDefault();goNext();}else if(e.key==='ArrowLeft'){e.preventDefault();$('back').click();}});
+$('guide').onchange=()=>renderStep();
+
+function renderReport(){
+  const rows=Object.values(report).filter(r=>r[0][0]!=='_');const calc=cur.calc?cur.calc(Object.fromEntries(rows.map(r=>[r[0],r[1]]))):[];
+  if(!rows.length){$('repT').innerHTML='<tbody><tr><td style="color:var(--muted)">Measurements appear here as you make them.</td><td></td></tr></tbody>';$('interp').innerHTML='';return;}
+  $('repT').innerHTML='<tbody>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+' '+r[2]+'</td></tr>').join('')+calc.map(r=>'<tr class="calc"><td>'+r[0]+' (calculated)</td><td>'+r[1]+' '+r[2]+'</td></tr>').join('')+'</tbody>';
+  $('interp').innerHTML='';
+}
+
+/* ---------------- physical panel (SVG) ---------------- */
+function buildPanel(){
+  const sv=$('panel');const k=(id,inner)=>'<g class="k" data-k="'+id+'">'+inner+'</g>';
+  const txt=(x,y,t,sz,fill,anchor)=>'<text x="'+x+'" y="'+y+'" font-size="'+(sz||11)+'" font-family="Inter,sans-serif" font-weight="700" fill="'+(fill||'#c9d3de')+'" text-anchor="'+(anchor||'middle')+'">'+t+'</text>';
+  let h='<rect x="6" y="14" width="988" height="172" rx="16" fill="#17191c" stroke="#dfe3e8" stroke-width="2"/>';
+  const key='fill="#2a2d32" stroke="#dfe3e8" stroke-width="2" class="kf"';
+  h+=k('tgc','<circle cx="58" cy="100" r="24" '+key+'/>'+txt(58,104,'TGC',10,'#dfe3e8'));
+  // gain wheel
+  let dots='';for(let i=0;i<14;i++){const a=-Math.PI*0.85+i*(Math.PI*1.7/13),r=46;dots+='<circle cx="'+(180+Math.cos(a-Math.PI/2)*r).toFixed(1)+'" cy="'+(100+Math.sin(a-Math.PI/2)*r).toFixed(1)+'" r="'+(1.2+i*0.18).toFixed(2)+'" fill="#dfe3e8"/>';}
+  h+=k('gain','<circle cx="180" cy="100" r="64" '+key+'/>'+dots+txt(180,170,'GAIN',10,'#dfe3e8'));
+  h+=k('auto','<circle cx="180" cy="100" r="22" '+key+'/>'+txt(180,104,'AUTO',9,'#dfe3e8'));
+  h+='<rect x="268" y="40" width="58" height="120" rx="12" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>';
+  h+=k('depthUp','<circle cx="297" cy="74" r="18" '+key+'/><path d="M289 78 L297 68 L305 78" stroke="#dfe3e8" stroke-width="2.5" fill="none"/>');
+  h+=k('depthDn','<circle cx="297" cy="126" r="18" '+key+'/><path d="M289 122 L297 132 L305 122" stroke="#dfe3e8" stroke-width="2.5" fill="none"/>');
+  h+=txt(297,176,'DEPTH',10,'#dfe3e8');
+  h+=k('select','<rect x="340" y="44" width="56" height="50" rx="6" fill="transparent" class="kf" stroke="transparent"/><rect x="344" y="50" width="48" height="10" rx="5" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>'+txt(368,82,'SELECT',10,'#dfe3e8'));
+  h+=k('update','<rect x="340" y="106" width="56" height="54" rx="6" fill="transparent" class="kf" stroke="transparent"/>'+txt(368,128,'UPDATE',10,'#dfe3e8')+'<rect x="344" y="140" width="48" height="10" rx="5" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>');
+  h+=k('touchpad','<rect x="408" y="36" width="178" height="128" rx="12" fill="#202226" '+'stroke="#dfe3e8" stroke-width="2" class="kf"/>'+txt(497,106,'TOUCHPAD',11,'#4b5058'));
+  h+=k('abc','<rect x="600" y="38" width="64" height="38" rx="6" fill="transparent" class="kf" stroke="transparent"/>'+txt(632,54,'ABC',10,'#dfe3e8')+'<rect x="608" y="60" width="48" height="10" rx="5" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>');
+  h+=k('calcs','<rect x="600" y="80" width="64" height="38" rx="6" fill="transparent" class="kf" stroke="transparent"/>'+txt(632,96,'CALCS',10,'#dfe3e8')+'<rect x="608" y="102" width="48" height="10" rx="5" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>');
+  h+=k('caliper','<rect x="600" y="122" width="64" height="40" rx="6" fill="transparent" class="kf" stroke="transparent"/>'+txt(632,138,'CALIPER',10,'#dfe3e8')+'<rect x="608" y="144" width="48" height="10" rx="5" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>');
+  h+='<rect x="676" y="40" width="128" height="120" rx="14" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>';
+  h+=k('saveImg','<rect x="680" y="44" width="58" height="56" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/><rect x="696" y="60" width="26" height="19" rx="3" fill="none" stroke="#dfe3e8" stroke-width="2"/><circle cx="709" cy="70" r="5" fill="none" stroke="#dfe3e8" stroke-width="2"/><rect x="701" y="56" width="8" height="5" fill="#dfe3e8"/>'+txt(709,94,'SAVE IMG',8,'#dfe3e8'));
+  h+=k('saveClip','<rect x="742" y="44" width="58" height="56" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/><rect x="757" y="61" width="20" height="16" rx="2" fill="none" stroke="#dfe3e8" stroke-width="2"/><path d="M777 66 L786 61 L786 77 L777 72" fill="none" stroke="#dfe3e8" stroke-width="2"/>'+txt(771,94,'SAVE CLIP',8,'#dfe3e8'));
+  let flake='';for(let i=0;i<6;i++){const a=i*Math.PI/3;flake+='<line x1="740" y1="130" x2="'+(740+Math.cos(a)*15).toFixed(1)+'" y2="'+(130+Math.sin(a)*15).toFixed(1)+'" stroke="#dfe3e8" stroke-width="2.5"/>';}
+  h+=k('freeze','<rect x="680" y="104" width="120" height="52" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/>'+flake+'<line x1="684" y1="104" x2="796" y2="104" stroke="#dfe3e8" stroke-width="2"/>'+txt(774,134,'FREEZE',8,'#dfe3e8'));
+  h+='<rect x="822" y="40" width="160" height="120" rx="14" fill="#2a2d32" stroke="#dfe3e8" stroke-width="2"/>';
+  h+=k('C','<rect x="828" y="46" width="46" height="56" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/>'+txt(851,80,'C',16,'#dfe3e8'));
+  h+=k('M','<rect x="879" y="46" width="46" height="56" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/>'+txt(902,80,'M',16,'#dfe3e8'));
+  h+=k('D','<rect x="930" y="46" width="46" height="56" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/>'+txt(953,80,'D',16,'#dfe3e8'));
+  h+='<line x1="876" y1="52" x2="876" y2="96" stroke="#dfe3e8" stroke-width="2"/><line x1="927" y1="52" x2="927" y2="96" stroke="#dfe3e8" stroke-width="2"/>';
+  h+=k('twoD','<rect x="828" y="106" width="148" height="50" rx="8" fill="#2a2d32" class="kf" stroke="transparent" stroke-width="2"/><line x1="836" y1="108" x2="968" y2="108" stroke="#dfe3e8" stroke-width="2"/>'+txt(902,138,'2D',14,'#3b82f6'));
+  sv.innerHTML=h;
+  sv.querySelectorAll('.k').forEach(g=>{g.addEventListener('click',e=>{e.stopPropagation();g.classList.add('flash');setTimeout(()=>g.classList.remove('flash'),180);act('p:'+g.dataset.k,null);});});
+}
+
+/* ---------------- monitor rendering ---------------- */
+const cv=document.createElement('canvas');cv.width=960;cv.height=600;const x=cv.getContext('2d');const W=960,H=600;
+const tex=document.createElement('canvas');tex.width=tex.height=256;{const t=tex.getContext('2d'),im=t.createImageData(256,256);for(let i=0;i<im.data.length;i+=4){const v=Math.random();im.data[i]=im.data[i+1]=im.data[i+2]=255;im.data[i+3]=v<0.5?Math.round(140*Math.random()):0;}t.putImageData(im,0,0);}
+const pat=x.createPattern(tex,'repeat');
+const CY=870;// cycle ms (HR ~69)
+let tNow=0;
+/* view geometry: chambers as [type,a,d,ra,rd,label] in sector coords (a: -1..1 lateral, d: 0..1 depth) */
+const GEO={
+ a4c:[['e',-0.36,0.42,0.22,0.28,'RV'],['e',0.2,0.4,0.27,0.31,'LV'],['e',-0.33,0.8,0.22,0.15,'RA'],['e',0.22,0.81,0.25,0.15,'LA']],
+ rvf:[['e',-0.3,0.42,0.3,0.29,'RV'],['e',0.3,0.4,0.22,0.3,'LV'],['e',-0.3,0.81,0.27,0.15,'RA'],['e',0.3,0.81,0.2,0.14,'LA']],
+ a5c:[['e',-0.36,0.42,0.22,0.28,'RV'],['e',0.2,0.38,0.27,0.29,'LV'],['e',-0.33,0.82,0.21,0.14,'RA'],['e',0.32,0.84,0.18,0.12,'LA'],['e',0.03,0.66,0.08,0.1,''],['e',0.02,0.79,0.12,0.09,'Ao']],
+ plax:[['e',0.0,0.22,0.6,0.08,'RV'],['e',-0.25,0.5,0.42,0.15,'LV'],['e',0.42,0.47,0.17,0.08,'Ao'],['e',0.4,0.72,0.22,0.12,'LA']],
+ psax:[['e',0,0.5,0.4,0.33,'LV'],['e',-0.28,0.2,0.4,0.07,'RV']]
+};
+const TGT={lvot:[0.03,0.64],mvtips:[0.17,0.62],septal:[-0.03,0.69],lateral:[0.42,0.68],tr:[-0.28,0.7],av:[0.02,0.7],ai:[0.03,0.64],mr:[0.18,0.66],tvann:[-0.56,0.66]};
+function geom(full){const r=full?{x:20,y:30,w:W-110,h:H-50}:{x:20,y:28,w:W-110,h:H*0.36-14};const ox=r.x+r.w/2,oy=r.y+8,F=r.h-16,R=F*16/(ctl.depth||16),half=0.62;return {ox,oy,R,F,half,r};}
+function P2(g,a,d){const ang=a*g.half;return [g.ox+Math.sin(ang)*d*g.R,g.oy+Math.cos(ang)*d*g.R];}
+function draw2D(full){
+  const g=geom(full);x.save();x.beginPath();x.rect(g.r.x,g.r.y,g.r.w,g.r.h);x.clip();
+  if(scene.zoom){const tg=TGT[scene.target||'lvot']||[0.3,0.5];const v=scene.view==='plax'?P2(g,0.3,0.55):P2(g,tg[0],tg[1]);x.translate(v[0],v[1]);x.scale(1.7,1.7);x.translate(-v[0],-v[1]);}
+  // fan
+  x.beginPath();x.moveTo(g.ox,g.oy);x.arc(g.ox,g.oy,g.F,Math.PI/2-g.half,Math.PI/2+g.half);x.closePath();
+  const gr=x.createRadialGradient(g.ox,g.oy,10,g.ox,g.oy,g.F);gr.addColorStop(0,'#5d5d5d');gr.addColorStop(0.5,'#4a4a4a');gr.addColorStop(1,'#202020');x.fillStyle=gr;x.fill();x.save();x.clip();x.globalAlpha=0.55;x.fillStyle=pat;x.fillRect(g.r.x-200,g.r.y-200,g.r.w+400,g.r.h+400);x.globalAlpha=1;
+  const ph=phase(),beat=0.03*Math.sin(2*Math.PI*ph);
+  (GEO[scene.view]||GEO.a4c).forEach(c=>{const [cx,cy]=P2(g,c[1],c[2]);const sc=(c[5]==='LV'||c[5]==='RV')?1-beat*2:1+beat;x.beginPath();x.ellipse(cx,cy,c[3]*g.R*0.62*sc,c[4]*g.R*sc,scene.view==='plax'&&c[5]==='LV'?-0.08:0,0,Math.PI*2);x.fillStyle='rgba(4,4,4,.93)';x.fill();
+    if(c[5]){x.fillStyle='rgba(220,230,240,.7)';x.font='700 '+(full?14:11)+'px Inter';x.textAlign='center';x.fillText(c[5],cx,cy+4);}});
+  if(scene.view==='psax'){const [cx,cy]=P2(g,0,0.52);const o=0.45+0.4*Math.max(0,Math.sin(2*Math.PI*(ph-0.5)));x.strokeStyle='rgba(235,235,235,.8)';x.lineWidth=full?7:4;x.beginPath();x.ellipse(cx,cy,g.R*0.2,g.R*0.08*o,0,0,Math.PI*2);x.stroke();}
+  {const gn=(ctl.gain||50)-50;x.fillStyle=gn<0?'rgba(0,0,0,'+(-gn/60)+')':'rgba(255,255,255,'+(gn/160)+')';x.fillRect(g.r.x-300,g.r.y-300,g.r.w+600,g.r.h+600);}
+  // color jet
+  if(scene.mode==='color'||(scene.colorJet&&scene.mode==='color')){drawJet(g,full);}
+  x.restore();
+  // dline
+  if(scene.dline&&scene.target&&scene.mode!=='color'){const tg=TGT[scene.target];const end=P2(g,tg[0]*1.25,1);const gp=P2(g,tg[0],tg[1]);x.setLineDash([6,5]);x.strokeStyle='#e5e7eb';x.lineWidth=1.5;x.beginPath();x.moveTo(g.ox,g.oy);x.lineTo(...end);x.stroke();x.setLineDash([]);
+    if(scene.mode==='pw'||scene.mode==='tdi'){x.strokeStyle='#fbbf24';x.lineWidth=2.5;const ang=Math.atan2(end[1]-g.oy,end[0]-g.ox)+Math.PI/2;for(const o of [-7,7]){const px=gp[0]+Math.cos(ang-Math.PI/2)*o,py=gp[1]+Math.sin(ang-Math.PI/2)*o;x.beginPath();x.moveTo(px-Math.cos(ang)*9,py-Math.sin(ang)*9);x.lineTo(px+Math.cos(ang)*9,py+Math.sin(ang)*9);x.stroke();}}
+    if(scene.mode==='cw'){x.fillStyle='#fbbf24';x.beginPath();x.moveTo(gp[0],gp[1]-6);x.lineTo(gp[0]+5,gp[1]);x.lineTo(gp[0],gp[1]+6);x.lineTo(gp[0]-5,gp[1]);x.fill();}}
+  if(scene.zoomBox){const [cx,cy]=P2(g,0.3,0.55);x.strokeStyle='#fbbf24';x.lineWidth=2;x.strokeRect(cx-110,cy-70,220,140);}
+  // 2D overlays
+  const ov=scene.ov;if(ov&&(ov.k==='dist'||ov.k==='poly'))draw2DOv(g,ov,full);
+  x.restore();
+  // depth scale
+  x.fillStyle='#cbd5e1';x.font='600 11px JetBrains Mono';x.textAlign='left';const dmax=ctl.depth||16;for(let i=0;i<=dmax;i+=2){const y=g.oy+i/dmax*g.F;if(i%4)continue;x.fillRect(g.r.x+g.r.w+10,y,6,1);if(full||i%8===0)x.fillText(String(i),g.r.x+g.r.w+20,y+4);}
+  // orientation marker
+  x.fillStyle='#4cc9f0';x.fillRect(g.ox-g.R*0.45,g.oy+4,9,9);
+}
+function drawJet(g,full){
+  const j=scene.colorJet;const ph=phase();
+  const sys=ph>0.05&&ph<0.42,dia=ph>0.46;
+  let pts=null,col=null;
+  if(j==='tr'&&sys){pts=[[-0.29,0.62],[-0.33,0.78],[-0.25,0.86]];col='mosaic';}
+  if(j==='mr'&&sys){pts=scene.view==='plax'?[[0.22,0.6],[0.35,0.7],[0.45,0.76]]:[[0.2,0.66],[0.25,0.78],[0.2,0.86]];col='mosaic';}
+  if(j==='ai'&&dia){pts=scene.view==='plax'?[[0.32,0.5],[0.15,0.52],[-0.05,0.54]]:[[0.03,0.7],[0.06,0.58],[0.1,0.48]];col='mosaic';}
+  if(j==='tr'&&dia){pts=[[-0.3,0.78],[-0.33,0.6]];col='red';}
+  if(!pts){if(dia&&j!=='ai'){pts=[[0.2,0.75],[0.2,0.5]];col='red';}else return;}
+  x.save();x.globalCompositeOperation='source-over';
+  pts.forEach((p,i)=>{const [cx,cy]=P2(g,p[0],p[1]);const r=g.R*(0.035+i*0.025);for(let k=0;k<40;k++){const a=Math.random()*6.28,rr=Math.random()*r;const px=cx+Math.cos(a)*rr,py=cy+Math.sin(a)*rr;
+    x.fillStyle=col==='red'?'rgba(200,30,20,.55)':['rgba(240,200,40,.7)','rgba(60,200,90,.6)','rgba(40,90,240,.7)','rgba(230,60,30,.7)'][k%4];x.fillRect(px,py,full?6:4,full?6:4);}});
+  x.restore();
+}
+function draw2DOv(g,ov,full){
+  x.strokeStyle='#fbbf24';x.fillStyle='#fbbf24';x.lineWidth=2;
+  const cross=(p)=>{x.beginPath();x.moveTo(p[0]-7,p[1]);x.lineTo(p[0]+7,p[1]);x.moveTo(p[0],p[1]-7);x.lineTo(p[0],p[1]+7);x.stroke();};
+  if(ov.k==='dist'){const L={lvot:[[0.2,0.4],[0.27,0.6]],aivc:[[0.27,0.43],[0.3,0.53]],mrvc:[[0.3,0.62],[0.37,0.68]]}[ov.what];
+    const a=P2(g,...L[0]),b=P2(g,...L[1]);const s=ov.s;if(s>=1)cross(a);if(s>=2){cross(s>=3?b:[a[0]+18,a[1]+18]);}if(s>=3){x.setLineDash([4,4]);x.beginPath();x.moveTo(...a);x.lineTo(...b);x.stroke();x.setLineDash([]);}}
+  if(ov.k==='poly'){const [cx,cy]=P2(g,0,0.52);const s=ov.s;if(s>=1)cross([cx-g.R*0.2,cy]);if(s>=3){x.beginPath();x.ellipse(cx,cy,g.R*0.19,g.R*0.06,0,0,Math.PI*2);x.stroke();}}
+}
+function phase(){const t=scene.frozen?frozenT:tNow;return ((t%CY)+CY)%CY/CY;}
+
+/* waveforms: velocity cm/s at phase */
+const sm=(a,b,v)=>{const t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t);};
+const WV={
+ hv:{scale:120,base:0.5,pw:true,fill:false,f:()=>0},
+ pv:{scale:80,base:0.5,pw:true,fill:false,f:()=>0},
+ irv:{scale:60,base:0.5,mul0:2,pw:true,fill:false,f:()=>0},
+ lvot:{scale:140,base:0.22,base0:0.37,fill:false,pw:true,f:p=>{if(p<0.06||p>0.4)return 0;const u=(p-0.06)/0.34;return -100*Math.pow(Math.sin(Math.PI*Math.pow(u,0.8)),1.2);}},
+ mv:{scale:140,base:0.78,fill:false,pw:true,f:p=>{let v=0;if(p>0.48&&p<0.75){v=p<0.55?80*sm(0.48,0.55,p):80*(1-(p-0.55)/0.22);}if(p>0.82&&p<0.99)v=Math.max(v,60*Math.sin(Math.PI*(p-0.82)/0.17));return Math.max(0,v);}},
+ tdi:{scale:40,base:0.5,fill:false,tissue:true,pw:true,f:p=>{if(p>0.08&&p<0.38)return 8*Math.sin(Math.PI*(p-0.08)/0.3);if(p>0.47&&p<0.66)return -7*Math.sin(Math.PI*(p-0.47)/0.19);if(p>0.84&&p<0.99)return -9*Math.sin(Math.PI*(p-0.84)/0.15);return 0;}},
+ tdil:{scale:40,base:0.5,fill:false,tissue:true,pw:true,f:p=>{if(p>0.08&&p<0.38)return 10*Math.sin(Math.PI*(p-0.08)/0.3);if(p>0.47&&p<0.66)return -10*Math.sin(Math.PI*(p-0.47)/0.19);if(p>0.84&&p<0.99)return -8*Math.sin(Math.PI*(p-0.84)/0.15);return 0;}},
+ tr:{scale:400,base:0.12,mul0:0.8,fill:true,f:p=>{if(p<0.04||p>0.45)return 0;const u=(p-0.04)/0.41;return -290*Math.pow(Math.sin(Math.PI*u),0.55);}},
+ as:{scale:520,base:0.1,mul0:0.8,fill:true,f:p=>{if(p<0.07||p>0.42)return 0;const u=(p-0.07)/0.35;return -430*Math.pow(Math.sin(Math.PI*u),0.9);}},
+ ai:{scale:520,base:0.85,base0:0.7,fill:true,f:p=>{if(p<0.46||p>0.995)return 0;const t=(p-0.46)*CY;return 420*Math.pow(2,-t/(2*380))*sm(0.46,0.475,p);}},
+ ms:{scale:300,base:0.85,fill:true,f:p=>{let v=0;if(p>0.46&&p<0.86){const t=(p-0.46)*CY;v=200*Math.pow(2,-t/(2*200))*sm(0.46,0.48,p);}if(p>0.86&&p<0.99)v=Math.max(v,150*Math.sin(Math.PI*(p-0.86)/0.13));return v;}},
+ mr:{scale:600,base:0.1,mul0:0.8,fill:true,f:p=>{if(p<0.04||p>0.46)return 0;const u=(p-0.04)/0.42;return -520*Math.pow(Math.sin(Math.PI*u),0.45);}}
+};
+function drawSweep(){
+  const r={x:20,y:H*0.38+10,w:W-110,h:H*0.62-24};
+  x.fillStyle='#000';x.fillRect(r.x,r.y,r.w,r.h);
+  const t1=scene.frozen?frozenT:tNow,span={Slow:3.4,Med:2.4,Fast:1.7}[ctl.sweep||'Med']*CY;
+  if(scene.wave==='tapse'){drawM(r,t1,span);return;}
+  syncWave();
+  const w=WV[scene.wave]||WV.lvot;const Vs=w.scale*(ctl.scaleMul||1),b=ctl.base!=null?ctl.base:w.base;
+  const top=r.y+r.h*0.03,ph=r.h*0.83,by=top+ph*b,k=ph/Vs,posMax=Vs*b,negMax=Vs*(1-b);
+  const Y=v=>by-v*k;const inv=v=>ctl.invert?-v:v;
+  const lim=v=>{if(w.pw){if(v>posMax)return v-Vs;if(v<-negMax)return v+Vs;return v;}return clamp(v,-negMax,posMax);};
+  for(let i=0;i<r.w;i+=2){const t=t1-span+(i/r.w)*span;const p=((t%CY)+CY)%CY/CY;const v0=inv(w.f(p));
+    if(Math.abs(v0)<0.5)continue;
+    const v=lim(v0),wrapped=w.pw&&v!==v0;
+    const y0=by,y1=Y(v);
+    if(w.fill){const g=x.createLinearGradient(0,y0,0,y1);g.addColorStop(0,'rgba(255,255,255,.18)');g.addColorStop(0.85,'rgba(255,255,255,.75)');g.addColorStop(1,'rgba(255,255,255,.95)');x.fillStyle=g;x.fillRect(r.x+i,Math.min(y0,y1),2,Math.abs(y1-y0));}
+    else{
+      if(wrapped){x.fillStyle='rgba(255,255,255,.35)';x.fillRect(r.x+i,v0>0?top:by,2,v0>0?by-top:top+ph-by);x.fillRect(r.x+i,v0>0?y1:top,2,v0>0?top+ph-y1:y1-top);}
+      const band=w.tissue?Math.abs(y1-y0):Math.min(26,Math.abs(y1-y0)*0.35);x.fillStyle=w.tissue?'rgba(255,255,255,.55)':'rgba(255,255,255,.06)';if(!wrapped)x.fillRect(r.x+i,Math.min(y0,y1),2,Math.abs(y1-y0));const gg=x.createLinearGradient(0,y1,0,v<0?y1-band:y1+band);gg.addColorStop(0,'rgba(255,255,255,.95)');gg.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gg;x.fillRect(r.x+i,v<0?y1-band:y1,2,band);}
+  }
+  x.globalAlpha=0.12;x.fillStyle=pat;x.fillRect(r.x,r.y,r.w,r.h);x.globalAlpha=1;
+  x.fillStyle='#4cc9f0';x.fillRect(r.x,by,r.w,1.2);
+  x.fillStyle='#cbd5e1';x.font='600 11px JetBrains Mono';x.textAlign='left';const ms=w.scale>200;
+  const st=Vs>300?100:Vs>100?20:Vs>40?10:5;for(let v=-Math.floor(negMax/st)*st;v<=posMax;v+=st){const y=Y(v);x.fillRect(r.x+r.w+6,y,6,1);if(Math.round(v/st)%2===0)x.fillText(ms?(v/100).toFixed(0):String(v),r.x+r.w+16,y+4);}
+  x.fillText(ms?'m/s':'cm/s',r.x+r.w+12,r.y+12);
+  // alias / clip warning
+  let pk=0;for(let p=0;p<1;p+=0.01)pk=Math.max(pk,Math.abs(w.f(p)));const over=(()=>{for(let p=0;p<1;p+=0.005){const v=inv(w.f(p));if(v>posMax||v<-negMax)return true;}return false;})();
+  if(over){x.fillStyle='#f87171';x.font='700 12px Inter';x.fillText(w.pw?'Aliasing: raise Scale or move the Baseline':'Signal cut off: raise Scale or move the Baseline',r.x+8,r.y+16);}
+  x.strokeStyle='#22c55e';x.lineWidth=1.5;x.beginPath();for(let i=0;i<r.w;i+=2){const t=t1-span+(i/r.w)*span;const p=((t%CY)+CY)%CY/CY;let e=0;e+=-26*Math.exp(-sq((p-0.985)/0.008))-26*Math.exp(-sq((p-0.005)/0.008));e+=-6*Math.exp(-sq((p-0.3)/0.04));e+=-4*Math.exp(-sq((p-0.9)/0.02));const y=r.y+r.h-10+e;i?x.lineTo(r.x+i,y):x.moveTo(r.x+i,y);}x.stroke();
+  drawSpecOv(r,w,t1,span,v=>Y(inv(v)),by);
+}
+function drawM(r,t1,span){
+  for(let i=0;i<r.w;i+=2){const t=t1-span+(i/r.w)*span;const p=((t%CY)+CY)%CY/CY;const exc=tapseY(p);
+    const layers=[[0.18,0.1,0.35],[0.42+exc,0.06,0.9],[0.5+exc,0.05,0.55],[0.78,0.12,0.4]];
+    layers.forEach(l=>{x.fillStyle='rgba(255,255,255,'+l[2]+')';x.fillRect(r.x+i,r.y+r.h*l[0],2,r.h*l[1]);});}
+  x.globalAlpha=0.25;x.fillStyle=pat;x.fillRect(r.x,r.y,r.w,r.h);x.globalAlpha=1;
+  x.fillStyle='#cbd5e1';x.font='600 11px JetBrains Mono';x.textAlign='left';for(let d=0;d<=16;d+=4){const y=r.y+d/16*r.h;x.fillRect(r.x+r.w+6,y,6,1);x.fillText(String(d),r.x+r.w+16,y+4);}
+  const ov=scene.ov;if(ov&&ov.k==='tapse'){const xs=pk=>r.x+((pk-(t1-span))/span)*r.w;const base=Math.floor((t1-span)/CY)*CY;let td=base+0.99*CY,ts=base+CY+0.3*CY;while(xs(td)<r.x+60)td+=CY,ts+=CY;
+    const yd=r.y+r.h*(0.42+tapseY(0.99)),ys=r.y+r.h*(0.42+tapseY(0.3));x.strokeStyle='#fbbf24';x.lineWidth=2;x.setLineDash([5,4]);
+    if(ov.s>=1){x.beginPath();x.moveTo(xs(td)-30,yd);x.lineTo(xs(td)+30,yd);x.stroke();}
+    if(ov.s>=3){x.beginPath();x.moveTo(xs(ts)-30,ys);x.lineTo(xs(ts)+30,ys);x.stroke();x.beginPath();x.moveTo(xs(ts),yd);x.lineTo(xs(ts),ys);x.stroke();}
+    x.setLineDash([]);}
+}
+function tapseY(p){return -0.13*(p<0.42?Math.sin(Math.PI*Math.min(1,p/0.32)/2):Math.max(0,1-(p-0.42)/0.2))*1;}
+function drawSpecOv(r,w,t1,span,Y,by){
+  const ov=scene.ov;if(!ov)return;
+  const X=t=>r.x+((t-(t1-span))/span)*r.w;
+  // choose a beat near the middle
+  let b0=Math.floor((t1-span)/CY)*CY;while(X(b0)<r.x+10)b0+=CY;
+  x.strokeStyle='#fbbf24';x.fillStyle='#fbbf24';x.lineWidth=2.2;
+  const cross=(px,py)=>{x.beginPath();x.moveTo(px-8,py);x.lineTo(px+8,py);x.moveTo(px,py-8);x.lineTo(px,py+8);x.stroke();};
+  const peakOf=(a,b)=>{let best=a,bv=0;for(let p=a;p<=b;p+=0.002){const v=Math.abs(w.f(p));if(v>bv){bv=v;best=p;}}return best;};
+  if(ov.k==='trace'){const rng=scene.wave==='ms'?[0.46,0.995]:scene.wave==='mv'?[0.48,0.99]:[0.04,0.46];let p0=rng[0];while(Math.abs(w.f(p0))<1&&p0<rng[1])p0+=0.002;
+    if(ov.s>=1)cross(X(b0+p0*CY),by);
+    let prog=ov.p||0;if(anim&&ov.s>=3){prog=clamp((performance.now()-anim.t0)/anim.dur,0,1);if(prog>=1)anim=null;}
+    if(ov.s>=3&&prog>0){x.beginPath();x.moveTo(X(b0+p0*CY),by);for(let p=p0;p<=rng[0]+(rng[1]-rng[0])*prog;p+=0.003){x.lineTo(X(b0+p*CY),Y(w.f(p)));}x.stroke();}}
+  if(ov.k==='vel'){let pk;if(ov.at==='E')pk=peakOf(0.5,0.7);else if(ov.at==='A')pk=peakOf(0.82,0.99);else if(ov.at==='e')pk=peakOf(0.47,0.66);else pk=peakOf(0.04,0.46);
+    const px=X(b0+pk*CY),py=Y(w.f(pk));x.setLineDash([4,4]);x.beginPath();x.moveTo(px,by);x.lineTo(px,py);x.stroke();x.setLineDash([]);cross(px,py);}
+  if(ov.k==='decel'){const pk=peakOf(0.5,0.7);const px=X(b0+pk*CY),py=Y(w.f(pk));cross(px,py);if(ov.s>=3){let pe=pk;while(w.f(pe)>1&&pe<0.8)pe+=0.002;x.beginPath();x.moveTo(px,py);x.lineTo(X(b0+pe*CY),by);x.stroke();cross(X(b0+pe*CY),by);}}
+  if(ov.k==='pht'){const p0=ov.w==='ai'?0.476:0.482;const px=X(b0+p0*CY),py=Y(w.f(p0));cross(px,py);if(ov.s>=3){const p1=ov.w==='ai'?0.99:0.84;x.beginPath();x.moveTo(px,py);x.lineTo(X(b0+p1*CY),Y(w.f(p1)));x.stroke();cross(X(b0+p1*CY),Y(w.f(p1)));}}
+  if(ov.k==='hr'){const pk=peakOf(0.04,0.46);const a=X(b0+pk*CY),b=X(b0+CY+pk*CY);x.setLineDash([5,4]);if(ov.s>=1){x.beginPath();x.moveTo(a,r.y);x.lineTo(a,r.y+r.h);x.stroke();}if(ov.s>=3){x.beginPath();x.moveTo(b,r.y);x.lineTo(b,r.y+r.h);x.stroke();}x.setLineDash([]);}
+  if(ov.k==='dpdt'){x.setLineDash([3,4]);[100,300].forEach((v,i)=>{if(ov.s>=i+1){x.beginPath();x.moveTo(r.x,Y(-v));x.lineTo(r.x+r.w,Y(-v));x.stroke();}});x.setLineDash([]);
+    const find=v=>{let p=0.04;while(Math.abs(w.f(p))<v&&p<0.3)p+=0.0005;return p;};if(ov.s>=2)cross(X(b0+find(100)*CY),Y(-100));if(ov.s>=3)cross(X(b0+find(300)*CY),Y(-300));}
+}
+function drawHUD(spec){
+  const modeT={'2d':'2D','color':'2D + Color','pw':'PW Doppler','cw':'CW Doppler','tdi':'TDI','m':'M Mode'}[scene.mode];
+  x.textAlign='left';x.font='700 12px JetBrains Mono';x.fillStyle='#4cc9f0';const head=modeT+(scene.zoom?' · Zoom':'')+'  ·  '+(VIEWS[scene.view]||'');x.fillText(head,26,22);
+  if(scene.frozen){const w0=x.measureText(head).width;x.fillStyle='#fbbf24';x.fillText('  ❄ FROZEN',26+w0,22);}
+  x.fillStyle='#94a3b8';x.font='600 11px Inter';x.textAlign='right';x.fillText('PX · '+(scene.exam||'P5-1 Cardiac')+'   Depth '+ctl.depth+' cm   Gain '+ctl.gain+'%'+(['pw','tdi'].includes(scene.mode)?'   Gate '+ctl.gate+' mm':''),W-14,H-8);
+  const rows=Object.values(report).slice(-6);x.textAlign='left';x.font='700 12px JetBrains Mono';rows.forEach((r,i)=>{x.fillStyle='rgba(0,0,0,.6)';x.fillRect(26,32+i*18,250,17);x.fillStyle='#fbbf24';x.fillText(r[0]+'  '+r[1]+' '+r[2],32,45+i*18);});
+}
+function frame(ts){
+  if(!scene.frozen)tNow=ts;
+  x.fillStyle='#000';x.fillRect(0,0,W,H);
+  const spec=scene.scroll&&['pw','cw','tdi','m'].includes(scene.mode);
+  draw2D(!spec);if(spec)drawSweep();
+  drawHUD(spec);
+  requestAnimationFrame(frame);
+}
+/* touchpad drag also counts */
+buildPanel();
+$('protos').innerHTML=P.map(p=>'<button data-id="'+p.id+'">'+p.name+'</button>').join('');
+document.querySelectorAll('#protos button').forEach(b=>b.onclick=()=>loadProto(P.find(p=>p.id===b.dataset.id)));
+loadProto(P[1]);
+window.__px={P,act,get si(){return si},get cur(){return cur},get scene(){return scene}};
+})();
+</script>
+</body>
+</html>
